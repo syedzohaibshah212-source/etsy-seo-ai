@@ -1349,3 +1349,94 @@ a {
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 768px) {
+  .navbar {
+    position: relative;
+    padding: 18px 14px 8px;
+  }
+
+  .navbarInner {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .navbarLogo img {
+    width: 125px;
+  }
+
+  .navbarLinks {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .navbarLinks a {
+    text-align: center;
+    font-size: 13px;
+    padding: 10px 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .navbarLinks .navbarCta {
+    grid-column: span 3;
+    padding: 12px 14px;
+  }
+
+  .heroSection {
+    padding: 24px 14px 60px;
+    min-height: auto;
+  }
+
+  .heroCard {
+    padding: 34px 18px;
+    border-radius: 28px;
+  }
+
+  .heroBadge {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .heroTitle {
+    font-size: 42px;
+    line-height: 1.05;
+    letter-spacing: -1px;
+  }
+
+  .heroText {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .heroActions {
+    flex-direction: column;
+  }
+
+  .heroActions a,
+  .heroActions button {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 430px) {
+  .navbarLinks {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .navbarLinks .navbarCta {
+    grid-column: span 2;
+  }
+
+  .heroTitle {
+    font-size: 38px;
+  }
+
+  .heroCard {
+    margin-top: 10px;
+  }
+}
