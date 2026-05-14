@@ -16,17 +16,6 @@ export default function SignupPage() {
 
   async function handleSignup() {
     setError("")
-
-    if (!fullName || !email || !password) {
-      setError("Please fill all fields.")
-      return
-    }
-
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.")
-      return
-    }
-
     setLoading(true)
 
     const { error } = await supabase.auth.signUp({
@@ -35,8 +24,6 @@ export default function SignupPage() {
       options: {
         data: {
           full_name: fullName,
-          plan: "Free",
-          credits: 5,
         },
       },
     })
@@ -60,7 +47,9 @@ export default function SignupPage() {
 
         <div>
           <span className="authBadge">Premium Etsy SEO Tool</span>
+
           <h1>Create your EtsySEO AI account</h1>
+
           <p>
             Start generating premium Etsy SEO listings, titles, tags, and
             descriptions using AI.
@@ -105,13 +94,8 @@ export default function SignupPage() {
             type="button"
             className="authButton"
             onClick={handleSignup}
-            disabled={loading}
           >
-            {loading ? "Creating Account..." : "Create Account"}
-          </button>
-
-          <button type="button" className="googleButton">
-            Continue with Google
+            {loading ? "Creating..." : "Create Account"}
           </button>
         </form>
 
