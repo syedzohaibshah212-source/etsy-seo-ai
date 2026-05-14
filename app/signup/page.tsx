@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { supabase } from "@/lib/supabase"
 
 export default function SignupPage() {
   const router = useRouter()
@@ -11,22 +12,41 @@ export default function SignupPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
 
-  function handleSignup() {
+  async function handleSignup() {
+    setError("")
+
     if (!fullName || !email || !password) {
       setError("Please fill all fields.")
       return
     }
 
-    localStorage.setItem(
-      "etsyseo_user",
-      JSON.stringify({
-        fullName,
-        email,
-        plan: "Free",
-        credits: 5,
-      })
-    )
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.")
+      return
+    }
+
+    setLoading(true)
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: fullName,
+          plan: "Free",
+          credits: 5,
+        },
+      },
+    })
+
+    setLoading(false)
+
+    if (error) {
+      setError(error.message)
+      return
+    }
 
     router.push("/dashboard")
   }
@@ -40,9 +60,7 @@ export default function SignupPage() {
 
         <div>
           <span className="authBadge">Premium Etsy SEO Tool</span>
-
           <h1>Create your EtsySEO AI account</h1>
-
           <p>
             Start generating premium Etsy SEO listings, titles, tags, and
             descriptions using AI.
@@ -83,8 +101,13 @@ export default function SignupPage() {
 
           {error && <p className="generateError">{error}</p>}
 
-          <button type="button" className="authButton" onClick={handleSignup}>
-            Create Account
+          <button
+            type="button"
+            className="authButton"
+            onClick={handleSignup}
+            disabled={loading}
+          >
+            {loading ? "Creating Account..." : "Create Account"}
           </button>
 
           <button type="button" className="googleButton">
