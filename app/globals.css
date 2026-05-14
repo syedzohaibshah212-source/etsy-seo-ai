@@ -1440,3 +1440,71 @@ a {
     margin-top: 10px;
   }
 }
+@media (max-width: 768px) {
+  .navbar {
+    position: static !important;
+    padding: 18px 14px 20px !important;
+  }
+
+  .navbarInner {
+    width: 100% !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  .navbarLogo img {
+    width: 135px !important;
+  }
+
+  .navbarLinks {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .navbarLinks a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 42px !important;
+    padding: 10px 8px !important;
+    font-size: 13px !important;
+    border-radius: 999px !important;
+    background: rgba(255, 255, 255, 0.07) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    text-align: center !important;
+  }
+
+  .navbarLinks .navbarCta {
+    grid-column: span 2 !important;
+  }
+
+  .heroSection {
+    min-height: auto !important;
+    padding: 20px 14px 70px !important;
+  }
+
+  .heroCard {
+    margin-top: 0 !important;
+    padding: 34px 18px !important;
+    border-radius: 28px !important;
+  }
+
+  .heroBadge {
+    margin-bottom: 18px !important;
+    font-size: 12px !important;
+    padding: 9px 12px !important;
+  }
+
+  .heroTitle {
+    font-size: 40px !important;
+    line-height: 1.08 !important;
+    letter-spacing: -1px !important;
+  }
+
+  .heroText {
+    font-size: 16px !important;
+    line-height: 1.65 !important;
+  }
+}
