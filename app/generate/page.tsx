@@ -2,7 +2,7 @@
 
 import "./style.css"
 
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { jsPDF } from "jspdf"
@@ -33,9 +33,54 @@ export default function GeneratePage() {
   const [competitorTitle, setCompetitorTitle] = useState("")
   const [method, setMethod] = useState(seoMethods[0])
   const [loading, setLoading] = useState(false)
+  const [pageLoading, setPageLoading] = useState(true)
   const [error, setError] = useState("")
   const [result, setResult] = useState<ListingResult | null>(null)
   const [remainingCredits, setRemainingCredits] = useState<number | null>(null)
+  const [plan, setPlan] = useState("Free")
+
+  const availableMethods = useMemo(() => {
+    if (plan === "Pro" || plan === "Agency") {
+      return seoMethods
+    }
+
+    return seoMethods.slice(0, 3)
+  }, [plan])
+
+  useEffect(() => {
+    async function loadProfile() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      if (!user) {
+        router.push("/login")
+        return
+      }
+
+      const { data } = await supabase
+        .from("profiles")
+        .select("plan, credits")
+        .eq("id", user.id)
+        .maybeSingle()
+
+      const userPlan =
+        typeof data?.plan === "string" && data.plan ? data.plan : "Free"
+
+      setPlan(userPlan)
+      setRemainingCredits(
+        typeof data?.credits === "number" ? data.credits : 5
+      )
+
+      if (userPlan === "Free" && !seoMethods.slice(0, 3).includes(method)) {
+        setMethod(seoMethods[0])
+      }
+
+      setPageLoading(false)
+    }
+
+    loadProfile()
+  }, [router, method])
 
   function handleImageChange(file: File) {
     setImageFile(file)
@@ -46,6 +91,11 @@ export default function GeneratePage() {
   async function generateListing() {
     if (!imageFile) {
       setError("Please upload a product image first.")
+      return
+    }
+
+    if (!availableMethods.includes(method)) {
+      setError("This SEO method is available on Pro only.")
       return
     }
 
@@ -140,7 +190,6 @@ ${result.scoreFeedback}
     if (!result) return
 
     const doc = new jsPDF()
-
     const pageWidth = doc.internal.pageSize.getWidth()
     const pageHeight = doc.internal.pageSize.getHeight()
     const margin = 14
@@ -198,10 +247,19 @@ ${result.scoreFeedback}
     setImageFile(null)
     setPreview(null)
     setCompetitorTitle("")
-    setMethod(seoMethods[0])
+    setMethod(availableMethods[0])
     setError("")
     setResult(null)
-    setRemainingCredits(null)
+  }
+
+  if (pageLoading) {
+    return (
+      <main className="generatePage">
+        <section className="generateHero">
+          <h1>Loading generator...</h1>
+        </section>
+      </main>
+    )
   }
 
   return (
@@ -237,9 +295,14 @@ ${result.scoreFeedback}
         <div className="generatorPanel">
           <h2>Product Input</h2>
 
-          {remainingCredits !== null && (
+          <p className="generateError">
+            Plan: {plan} • Credits: {remainingCredits ?? 0}
+          </p>
+
+          {plan === "Free" && (
             <p className="generateError">
-              Remaining credits: {remainingCredits}
+              Free plan includes only first 3 SEO methods. Upgrade to Pro for all
+              12 methods.
             </p>
           )}
 
@@ -259,13 +322,19 @@ ${result.scoreFeedback}
             <span>SEO Method</span>
 
             <select value={method} onChange={(e) => setMethod(e.target.value)}>
-              {seoMethods.map((item) => (
+              {availableMethods.map((item) => (
                 <option key={item} value={item}>
                   {item}
                 </option>
               ))}
             </select>
           </label>
+
+          {plan === "Free" && (
+            <Link href="/pricing" className="primaryBtn">
+              Unlock All 12 Methods
+            </Link>
+          )}
 
           {error && <p className="generateError">{error}</p>}
 
