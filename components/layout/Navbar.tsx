@@ -8,6 +8,12 @@ import { supabase } from "@/lib/supabase"
 type UserProfile = {
   fullName: string
   email: string
+  avatarUrl: string
+}
+
+type ProfileData = {
+  full_name: string | null
+  avatar_url: string | null
 }
 
 export default function Navbar() {
@@ -23,12 +29,22 @@ export default function Navbar() {
       } = await supabase.auth.getUser()
 
       if (user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("full_name, avatar_url")
+          .eq("id", user.id)
+          .maybeSingle<ProfileData>()
+
         setUser({
           fullName:
-            typeof user.user_metadata?.full_name === "string"
+            profile?.full_name ||
+            (typeof user.user_metadata?.full_name === "string"
               ? user.user_metadata.full_name
-              : "User",
+              : "User"),
+
           email: user.email || "",
+
+          avatarUrl: profile?.avatar_url || "",
         })
       }
 
@@ -39,14 +55,24 @@ export default function Navbar() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("full_name, avatar_url")
+          .eq("id", session.user.id)
+          .maybeSingle<ProfileData>()
+
         setUser({
           fullName:
-            typeof session.user.user_metadata?.full_name === "string"
+            profile?.full_name ||
+            (typeof session.user.user_metadata?.full_name === "string"
               ? session.user.user_metadata.full_name
-              : "User",
+              : "User"),
+
           email: session.user.email || "",
+
+          avatarUrl: profile?.avatar_url || "",
         })
       } else {
         setUser(null)
@@ -100,26 +126,42 @@ export default function Navbar() {
                 marginLeft: "10px",
               }}
             >
-              <div
-                title={user.fullName}
-                style={{
-                  width: "42px",
-                  height: "42px",
-                  borderRadius: "999px",
-                  background:
-                    "linear-gradient(135deg, #d4af37 0%, #facc15 100%)",
-                  color: "#000",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontWeight: 800,
-                  fontSize: "16px",
-                  textTransform: "uppercase",
-                  boxShadow: "0 10px 30px rgba(250,204,21,0.25)",
-                }}
-              >
-                {user.fullName.charAt(0)}
-              </div>
+              <Link href="/settings">
+                <div
+                  title={user.fullName}
+                  style={{
+                    width: "44px",
+                    height: "44px",
+                    borderRadius: "999px",
+                    overflow: "hidden",
+                    background:
+                      "linear-gradient(135deg, #d4af37 0%, #22c55e 100%)",
+                    color: "#000",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 800,
+                    fontSize: "16px",
+                    textTransform: "uppercase",
+                    boxShadow: "0 10px 30px rgba(250,204,21,0.25)",
+                    cursor: "pointer",
+                  }}
+                >
+                  {user.avatarUrl ? (
+                    <img
+                      src={user.avatarUrl}
+                      alt={user.fullName}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    user.fullName.charAt(0)
+                  )}
+                </div>
+              </Link>
 
               <button
                 onClick={logout}

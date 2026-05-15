@@ -10,15 +10,20 @@ type ProfileData = {
   email: string | null
   plan: string | null
   credits: number | null
+  avatar_url: string | null
 }
 
 export default function SettingsPage() {
   const router = useRouter()
 
+  const [userId, setUserId] = useState("")
   const [fullName, setFullName] = useState("")
   const [email, setEmail] = useState("")
   const [plan, setPlan] = useState("Free")
   const [credits, setCredits] = useState(5)
+  const [avatarUrl, setAvatarUrl] = useState("")
+  const [avatarFile, setAvatarFile] = useState<File | null>(null)
+  const [avatarPreview, setAvatarPreview] = useState("")
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState("")
@@ -35,9 +40,11 @@ export default function SettingsPage() {
         return
       }
 
+      setUserId(user.id)
+
       const { data } = await supabase
         .from("profiles")
-        .select("full_name, email, plan, credits")
+        .select("full_name, email, plan, credits, avatar_url")
         .eq("id", user.id)
         .maybeSingle<ProfileData>()
 
@@ -51,6 +58,7 @@ export default function SettingsPage() {
       setEmail(data?.email || user.email || "")
       setPlan(data?.plan || "Free")
       setCredits(typeof data?.credits === "number" ? data.credits : 5)
+      setAvatarUrl(data?.avatar_url || "")
 
       setLoading(false)
     }
@@ -58,41 +66,101 @@ export default function SettingsPage() {
     loadSettings()
   }, [router])
 
+  function handleAvatarChange(file: File | null) {
+    setError("")
+    setMessage("")
+
+    if (!file) return
+
+    const allowedTypes = ["image/png", "image/jpeg", "image/webp"]
+
+    if (!allowedTypes.includes(file.type)) {
+      setError("Only PNG, JPG, JPEG, and WEBP images are allowed.")
+      return
+    }
+
+    const maxSize = 2 * 1024 * 1024
+
+    if (file.size > maxSize) {
+      setError("Profile photo must be smaller than 2MB.")
+      return
+    }
+
+    setAvatarFile(file)
+    setAvatarPreview(URL.createObjectURL(file))
+  }
+
+  async function uploadAvatar() {
+    if (!avatarFile || !userId) return avatarUrl
+
+    const fileExt = avatarFile.name.split(".").pop() || "png"
+    const filePath = `${userId}/avatar-${Date.now()}.${fileExt}`
+
+    const { error: uploadError } = await supabase.storage
+      .from("avatars")
+      .upload(filePath, avatarFile, {
+        cacheControl: "3600",
+        upsert: true,
+      })
+
+    if (uploadError) {
+      throw new Error(uploadError.message)
+    }
+
+    const { data } = supabase.storage
+      .from("avatars")
+      .getPublicUrl(filePath)
+
+    return data.publicUrl
+  }
+
   async function saveProfile() {
     setSaving(true)
     setError("")
     setMessage("")
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
 
-    if (!user) {
-      router.push("/login")
-      return
-    }
+      if (!user) {
+        router.push("/login")
+        return
+      }
 
-    const { error } = await supabase
-      .from("profiles")
-      .update({
-        full_name: fullName,
+      const uploadedAvatarUrl = await uploadAvatar()
+
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          full_name: fullName,
+          avatar_url: uploadedAvatarUrl,
+        })
+        .eq("id", user.id)
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      await supabase.auth.updateUser({
+        data: {
+          full_name: fullName,
+          avatar_url: uploadedAvatarUrl,
+        },
       })
-      .eq("id", user.id)
 
-    if (error) {
-      setError(error.message)
+      setAvatarUrl(uploadedAvatarUrl || "")
+      setAvatarFile(null)
+      setAvatarPreview("")
+      setMessage("Profile updated successfully.")
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Profile update failed."
+      )
+    } finally {
       setSaving(false)
-      return
     }
-
-    await supabase.auth.updateUser({
-      data: {
-        full_name: fullName,
-      },
-    })
-
-    setMessage("Profile updated successfully.")
-    setSaving(false)
   }
 
   async function logout() {
@@ -110,6 +178,8 @@ export default function SettingsPage() {
     )
   }
 
+  const activeAvatar = avatarPreview || avatarUrl
+
   return (
     <main className="authPage">
       <section className="authLeft">
@@ -123,8 +193,8 @@ export default function SettingsPage() {
           <h1>Manage your EtsySEO AI account</h1>
 
           <p>
-            Update your profile, check your current plan, view credits and manage
-            account access.
+            Update your profile photo, check your current plan, view credits and
+            manage account access.
           </p>
         </div>
       </section>
@@ -136,6 +206,56 @@ export default function SettingsPage() {
         </div>
 
         <form className="authForm">
+          <label>Profile Photo</label>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "16px",
+              flexWrap: "wrap",
+            }}
+          >
+            <div
+              style={{
+                width: "86px",
+                height: "86px",
+                borderRadius: "999px",
+                overflow: "hidden",
+                background:
+                  "linear-gradient(135deg, #d4af37 0%, #22c55e 100%)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#06111f",
+                fontSize: "32px",
+                fontWeight: 900,
+              }}
+            >
+              {activeAvatar ? (
+                <img
+                  src={activeAvatar}
+                  alt="Profile"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              ) : (
+                fullName.charAt(0) || "U"
+              )}
+            </div>
+
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              onChange={(e) =>
+                handleAvatarChange(e.target.files?.[0] || null)
+              }
+            />
+          </div>
+
           <label>Full Name</label>
 
           <input
@@ -174,11 +294,7 @@ export default function SettingsPage() {
             Manage / Upgrade Plan
           </Link>
 
-          <button
-            type="button"
-            className="googleButton"
-            onClick={logout}
-          >
+          <button type="button" className="googleButton" onClick={logout}>
             Logout
           </button>
         </form>
