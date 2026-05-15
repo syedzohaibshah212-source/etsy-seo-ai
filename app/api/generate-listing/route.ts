@@ -132,7 +132,6 @@ export async function POST(req: Request) {
       .maybeSingle<ProfileData>()
 
     let currentCredits = profile?.credits ?? 5
-    const currentPlan = profile?.plan || "Free"
 
     if (!profile) {
       await supabase.from("profiles").insert({
@@ -145,9 +144,11 @@ export async function POST(req: Request) {
         plan: "Free",
         credits: 5,
       })
+
+      currentCredits = 5
     }
 
-    if (currentCredits <= 0 && currentPlan === "Free") {
+    if (currentCredits <= 0) {
       return NextResponse.json(
         {
           success: false,
@@ -249,6 +250,7 @@ export async function POST(req: Request) {
 
     if (listingError) {
       console.error("Save listing error:", listingError)
+
       return NextResponse.json(
         {
           success: false,
@@ -258,21 +260,23 @@ export async function POST(req: Request) {
       )
     }
 
-    if (currentPlan === "Free") {
-      currentCredits -= 1
+    const remainingCredits = currentCredits - 1
 
-      await supabase
-        .from("profiles")
-        .update({
-          credits: currentCredits,
-        })
-        .eq("id", user.id)
+    const { error: creditError } = await supabase
+      .from("profiles")
+      .update({
+        credits: remainingCredits,
+      })
+      .eq("id", user.id)
+
+    if (creditError) {
+      console.error("Credit update error:", creditError)
     }
 
     return NextResponse.json({
       success: true,
       mode: "ai-vision-generated",
-      remainingCredits: currentCredits,
+      remainingCredits,
       listingId: savedListing?.id,
       data,
     })
