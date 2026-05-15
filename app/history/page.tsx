@@ -1,27 +1,113 @@
-import Link from "next/link";
+"use client"
 
-const historyItems = [
-  {
-    title: "Personalized Birthday Gift PNG",
-    category: "Home & Living > Home Decor",
-    date: "Today",
-    tags: ["personalized gift", "birthday gift", "custom png", "etsy seo"],
-  },
-  {
-    title: "Teacher Appreciation Shirt Design",
-    category: "Clothing > Gender-Neutral Adult Clothing",
-    date: "Yesterday",
-    tags: ["teacher gift", "shirt design", "school png", "gift for teacher"],
-  },
-  {
-    title: "Custom Family Name Wall Art",
-    category: "Home & Living > Wall Decor",
-    date: "3 days ago",
-    tags: ["family wall art", "custom decor", "home gift", "personalized"],
-  },
-];
+import { useEffect, useState } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { supabase } from "@/lib/supabase"
+
+type ListingItem = {
+  id: string
+  title: string
+  category: string
+  tags: string[]
+  created_at: string
+  description: string
+  seo_score: number
+}
 
 export default function HistoryPage() {
+  const router = useRouter()
+
+  const [listings, setListings] = useState<ListingItem[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function loadListings() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      if (!user) {
+        router.push("/login")
+        return
+      }
+
+      const { data, error } = await supabase
+        .from("listings")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+
+      if (!error && data) {
+        setListings(data)
+      }
+
+      setLoading(false)
+    }
+
+    loadListings()
+  }, [router])
+
+  function formatDate(date: string) {
+    return new Date(date).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    })
+  }
+
+  async function deleteListing(id: string) {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this listing?"
+    )
+
+    if (!confirmed) return
+
+    const { error } = await supabase
+      .from("listings")
+      .delete()
+      .eq("id", id)
+
+    if (!error) {
+      setListings((prev) =>
+        prev.filter((listing) => listing.id !== id)
+      )
+    }
+  }
+
+  function copyListing(item: ListingItem) {
+    const content = `
+EtsySEO AI Listing
+
+Title:
+${item.title}
+
+Category:
+${item.category}
+
+SEO Score:
+${item.seo_score}/100
+
+Tags:
+${item.tags.join(", ")}
+
+Description:
+${item.description}
+`
+
+    navigator.clipboard.writeText(content)
+  }
+
+  if (loading) {
+    return (
+      <main className="historyPage">
+        <section className="historyHero">
+          <h1>Loading history...</h1>
+        </section>
+      </main>
+    )
+  }
+
   return (
     <main className="historyPage">
       <nav className="historyNav">
@@ -33,7 +119,7 @@ export default function HistoryPage() {
           <Link href="/dashboard">Dashboard</Link>
           <Link href="/generate">Generator</Link>
           <Link href="/pricing">Pricing</Link>
-          <Link href="/login">Login</Link>
+          <Link href="/settings">Settings</Link>
         </div>
       </nav>
 
@@ -55,27 +141,62 @@ export default function HistoryPage() {
       </section>
 
       <section className="historyGrid">
-        {historyItems.map((item) => (
-          <article className="historyCard" key={item.title}>
-            <div className="historyCardTop">
-              <div>
-                <span>{item.date}</span>
-                <h3>{item.title}</h3>
+        {listings.length === 0 ? (
+          <div className="emptyResult">
+            <h3>No saved listings yet</h3>
+
+            <p>
+              Your generated Etsy SEO listings will appear here after generation.
+            </p>
+          </div>
+        ) : (
+          listings.map((item) => (
+            <article className="historyCard" key={item.id}>
+              <div className="historyCardTop">
+                <div>
+                  <span>{formatDate(item.created_at)}</span>
+
+                  <h3>{item.title}</h3>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <button onClick={() => copyListing(item)}>
+                    Copy
+                  </button>
+
+                  <button onClick={() => deleteListing(item.id)}>
+                    Delete
+                  </button>
+                </div>
               </div>
 
-              <button>Copy</button>
-            </div>
+              <p>{item.category}</p>
 
-            <p>{item.category}</p>
+              <div className="historyTags">
+                {item.tags?.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
 
-            <div className="historyTags">
-              {item.tags.map((tag) => (
-                <span key={tag}>{tag}</span>
-              ))}
-            </div>
-          </article>
-        ))}
+              <div
+                style={{
+                  marginTop: "16px",
+                  color: "var(--text-muted)",
+                  lineHeight: 1.7,
+                }}
+              >
+                {item.description}
+              </div>
+            </article>
+          ))
+        )}
       </section>
     </main>
-  );
+  )
 }
