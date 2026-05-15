@@ -143,7 +143,6 @@ export default function DashboardPage() {
           <div>
             <span>Welcome back, {user?.fullName}</span>
             <h1>Your EtsySEO AI Dashboard</h1>
-            <p>{user?.email}</p>
           </div>
 
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
