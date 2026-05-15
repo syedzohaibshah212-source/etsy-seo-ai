@@ -4,9 +4,11 @@ import "./style.css"
 
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { jsPDF } from "jspdf"
 import UploadBox from "@/components/generate/UploadBox"
 import type { ListingResult } from "@/types/listing"
+import { supabase } from "@/lib/supabase"
 
 const seoMethods = [
   "METHOD 1: Exact Buyer Intent + Long-Tail Relevance",
@@ -24,6 +26,8 @@ const seoMethods = [
 ]
 
 export default function GeneratePage() {
+  const router = useRouter()
+
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
   const [competitorTitle, setCompetitorTitle] = useState("")
@@ -31,6 +35,7 @@ export default function GeneratePage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [result, setResult] = useState<ListingResult | null>(null)
+  const [remainingCredits, setRemainingCredits] = useState<number | null>(null)
 
   function handleImageChange(file: File) {
     setImageFile(file)
@@ -48,6 +53,16 @@ export default function GeneratePage() {
     setError("")
 
     try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      if (!session?.access_token) {
+        setError("Please login before generating a listing.")
+        router.push("/login")
+        return
+      }
+
       const formData = new FormData()
 
       formData.append("image", imageFile)
@@ -56,6 +71,9 @@ export default function GeneratePage() {
 
       const response = await fetch("/api/generate-listing", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
         body: formData,
       })
 
@@ -66,6 +84,10 @@ export default function GeneratePage() {
       }
 
       setResult(json.data)
+
+      if (typeof json.remainingCredits === "number") {
+        setRemainingCredits(json.remainingCredits)
+      }
     } catch (err) {
       setError(
         err instanceof Error
@@ -121,17 +143,13 @@ ${result.scoreFeedback}
 
     const pageWidth = doc.internal.pageSize.getWidth()
     const pageHeight = doc.internal.pageSize.getHeight()
-
     const margin = 14
-
     let y = 18
 
     function addTitle(text: string) {
       doc.setFont("helvetica", "bold")
       doc.setFontSize(18)
-
       doc.text(text, margin, y)
-
       y += 12
     }
 
@@ -143,18 +161,13 @@ ${result.scoreFeedback}
 
       doc.setFont("helvetica", "bold")
       doc.setFontSize(12)
-
       doc.text(title, margin, y)
-
       y += 7
 
       doc.setFont("helvetica", "normal")
       doc.setFontSize(10)
 
-      const lines = doc.splitTextToSize(
-        content,
-        pageWidth - margin * 2
-      )
+      const lines = doc.splitTextToSize(content, pageWidth - margin * 2)
 
       lines.forEach((line: string) => {
         if (y > pageHeight - 15) {
@@ -163,7 +176,6 @@ ${result.scoreFeedback}
         }
 
         doc.text(line, margin, y)
-
         y += 5
       })
 
@@ -171,7 +183,6 @@ ${result.scoreFeedback}
     }
 
     addTitle("EtsySEO AI Listing Report")
-
     addSection("SEO Score", `${result.seoScore}/100`)
     addSection("Optimized Title", result.title)
     addSection("Category", result.category)
@@ -190,6 +201,7 @@ ${result.scoreFeedback}
     setMethod(seoMethods[0])
     setError("")
     setResult(null)
+    setRemainingCredits(null)
   }
 
   return (
@@ -201,13 +213,9 @@ ${result.scoreFeedback}
 
         <div className="navLinks">
           <Link href="/">Home</Link>
-
           <Link href="/pricing">Pricing</Link>
-
           <Link href="/history">History</Link>
-
           <Link href="/settings">Settings</Link>
-
           <Link href="/dashboard" className="navCta">
             Dashboard
           </Link>
@@ -215,16 +223,13 @@ ${result.scoreFeedback}
       </nav>
 
       <section className="generateHero">
-        <div className="heroBadge">
-          AI Vision Etsy SEO Engine
-        </div>
+        <div className="heroBadge">AI Vision Etsy SEO Engine</div>
 
         <h1>Generate Etsy PNG SEO Listings</h1>
 
         <p>
-          Upload a PNG design, choose one SEO strategy,
-          and generate a title, description, tags,
-          category and SEO score.
+          Upload a PNG design, choose one SEO strategy, and generate a title,
+          description, tags, category and SEO score.
         </p>
       </section>
 
@@ -232,19 +237,20 @@ ${result.scoreFeedback}
         <div className="generatorPanel">
           <h2>Product Input</h2>
 
-          <UploadBox
-            preview={preview}
-            onImageChange={handleImageChange}
-          />
+          {remainingCredits !== null && (
+            <p className="generateError">
+              Remaining credits: {remainingCredits}
+            </p>
+          )}
+
+          <UploadBox preview={preview} onImageChange={handleImageChange} />
 
           <label className="fieldGroup">
             <span>Competitor Etsy Title Optional</span>
 
             <textarea
               value={competitorTitle}
-              onChange={(e) =>
-                setCompetitorTitle(e.target.value)
-              }
+              onChange={(e) => setCompetitorTitle(e.target.value)}
               placeholder="Paste competitor Etsy title here..."
             />
           </label>
@@ -252,10 +258,7 @@ ${result.scoreFeedback}
           <label className="fieldGroup">
             <span>SEO Method</span>
 
-            <select
-              value={method}
-              onChange={(e) => setMethod(e.target.value)}
-            >
+            <select value={method} onChange={(e) => setMethod(e.target.value)}>
               {seoMethods.map((item) => (
                 <option key={item} value={item}>
                   {item}
@@ -264,25 +267,14 @@ ${result.scoreFeedback}
             </select>
           </label>
 
-          {error && (
-            <p className="generateError">{error}</p>
-          )}
+          {error && <p className="generateError">{error}</p>}
 
           <div className="generateActions">
-            <button
-              onClick={generateListing}
-              disabled={loading}
-            >
-              {loading
-                ? "Analyzing PNG..."
-                : "Generate Listing"}
+            <button onClick={generateListing} disabled={loading}>
+              {loading ? "Analyzing PNG..." : "Generate Listing"}
             </button>
 
-            <button
-              type="button"
-              onClick={clearAll}
-              className="clearBtn"
-            >
+            <button type="button" onClick={clearAll} className="clearBtn">
               Clear All
             </button>
           </div>
@@ -296,8 +288,7 @@ ${result.scoreFeedback}
               <h3>No listing generated yet</h3>
 
               <p>
-                Your optimized Etsy title,
-                description, tags, category and SEO
+                Your optimized Etsy title, description, tags, category and SEO
                 score will appear here.
               </p>
             </div>
@@ -305,55 +296,33 @@ ${result.scoreFeedback}
             <div className="resultBox compactResult">
               <div className="scoreCard">
                 <span>SEO Score</span>
-
                 <h3>{result.seoScore}/100</h3>
-
                 <p>{result.scoreFeedback}</p>
               </div>
 
               <div className="resultItem large">
                 <div>
                   <span>Optimized Title</span>
-
                   <p>{result.title}</p>
                 </div>
 
-                <button
-                  onClick={() =>
-                    copyText(result.title)
-                  }
-                >
-                  Copy
-                </button>
+                <button onClick={() => copyText(result.title)}>Copy</button>
               </div>
 
               <div className="resultItem">
                 <div>
                   <span>Category</span>
-
                   <p>{result.category}</p>
                 </div>
 
-                <button
-                  onClick={() =>
-                    copyText(result.category)
-                  }
-                >
-                  Copy
-                </button>
+                <button onClick={() => copyText(result.category)}>Copy</button>
               </div>
 
               <div className="tagsResult">
                 <div className="tagsTop">
                   <span>Etsy Tags</span>
 
-                  <button
-                    onClick={() =>
-                      copyText(
-                        result.tags.join(", ")
-                      )
-                    }
-                  >
+                  <button onClick={() => copyText(result.tags.join(", "))}>
                     Copy Tags
                   </button>
                 </div>
@@ -368,15 +337,10 @@ ${result.scoreFeedback}
               <div className="resultItem large descriptionCard">
                 <div>
                   <span>SEO Description</span>
-
                   <p>{result.description}</p>
                 </div>
 
-                <button
-                  onClick={() =>
-                    copyText(result.description)
-                  }
-                >
+                <button onClick={() => copyText(result.description)}>
                   Copy
                 </button>
               </div>
@@ -384,19 +348,13 @@ ${result.scoreFeedback}
               <div className="resultItem large">
                 <div>
                   <span>Score Breakdown</span>
-
                   <p>{result.scoreBreakdown}</p>
                 </div>
               </div>
 
               <div className="resultButtons">
-                <button onClick={copyAll}>
-                  Copy Full Listing
-                </button>
-
-                <button onClick={downloadPDF}>
-                  Download PDF
-                </button>
+                <button onClick={copyAll}>Copy Full Listing</button>
+                <button onClick={downloadPDF}>Download PDF</button>
               </div>
             </div>
           )}
