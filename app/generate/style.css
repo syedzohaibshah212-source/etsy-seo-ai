@@ -429,3 +429,42 @@
     max-height: 360px;
   }
 }
+.generatorPanel .primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin: 14px 0 6px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.fieldGroup {
+  margin-bottom: 18px;
+}
+
+.generateActions {
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.generateActions button {
+  min-height: 48px;
+}
+
+@media (max-width: 700px) {
+  .generatorPanel .primaryBtn {
+    width: 100%;
+  }
+
+  .generateActions {
+    flex-direction: column;
+  }
+
+  .generateActions button {
+    width: 100%;
+  }
+}
