@@ -1,6 +1,33 @@
-import Link from "next/link";
+"use client"
+
+import Link from "next/link"
 
 export default function PricingPage() {
+  async function checkout(plan: "pro" | "agency") {
+    try {
+      const response = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ plan }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        alert(data.error || "Checkout failed.")
+        return
+      }
+
+      if (data.url) {
+        window.location.href = data.url
+      }
+    } catch {
+      alert("Something went wrong while opening checkout.")
+    }
+  }
+
   return (
     <main className="pricingPage">
       <nav className="pricingNav">
@@ -33,9 +60,7 @@ export default function PricingPage() {
         <div className="pricingPlan">
           <h3>Free</h3>
 
-          <p className="planDesc">
-            Best for testing the tool.
-          </p>
+          <p className="planDesc">Best for testing the tool.</p>
 
           <div className="planPrice">
             $0 <span>/ month</span>
@@ -55,15 +80,11 @@ export default function PricingPage() {
         </div>
 
         <div className="pricingPlan featuredPlan">
-          <div className="popularBadge">
-            Most Popular
-          </div>
+          <div className="popularBadge">Most Popular</div>
 
           <h3>Pro</h3>
 
-          <p className="planDesc">
-            For serious Etsy sellers.
-          </p>
+          <p className="planDesc">For serious Etsy sellers.</p>
 
           <div className="planPrice">
             $9 <span>/ month</span>
@@ -78,17 +99,19 @@ export default function PricingPage() {
             <li>Future competitor insights</li>
           </ul>
 
-          <Link href="/signup" className="primaryBtn">
+          <button
+            type="button"
+            className="primaryBtn"
+            onClick={() => checkout("pro")}
+          >
             Upgrade Pro
-          </Link>
+          </button>
         </div>
 
         <div className="pricingPlan">
           <h3>Agency</h3>
 
-          <p className="planDesc">
-            For shops and teams.
-          </p>
+          <p className="planDesc">For shops and teams.</p>
 
           <div className="planPrice">
             $29 <span>/ month</span>
@@ -102,11 +125,15 @@ export default function PricingPage() {
             <li>Premium support</li>
           </ul>
 
-          <Link href="/signup" className="secondaryBtn">
+          <button
+            type="button"
+            className="secondaryBtn"
+            onClick={() => checkout("agency")}
+          >
             Start Agency
-          </Link>
+          </button>
         </div>
       </section>
     </main>
-  );
+  )
 }
