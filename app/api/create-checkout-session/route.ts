@@ -1,22 +1,28 @@
 import { NextResponse } from "next/server"
 import Stripe from "stripe"
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "")
+export const dynamic = "force-dynamic"
 
 export async function POST(req: Request) {
   try {
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+
+    if (!stripeSecretKey) {
+      return NextResponse.json(
+        { error: "Stripe secret key is missing." },
+        { status: 500 }
+      )
+    }
+
+    const stripe = new Stripe(stripeSecretKey)
+
     const body = await req.json()
     const plan = body.plan
 
-    let priceId = ""
-
-    if (plan === "pro") {
-      priceId = process.env.STRIPE_PRO_PRICE_ID || ""
-    }
-
-    if (plan === "agency") {
-      priceId = process.env.STRIPE_AGENCY_PRICE_ID || ""
-    }
+    const priceId =
+      plan === "agency"
+        ? process.env.STRIPE_AGENCY_PRICE_ID
+        : process.env.STRIPE_PRO_PRICE_ID
 
     if (!priceId) {
       return NextResponse.json(
@@ -40,9 +46,7 @@ export async function POST(req: Request) {
       cancel_url: `${siteUrl}/pricing`,
     })
 
-    return NextResponse.json({
-      url: session.url,
-    })
+    return NextResponse.json({ url: session.url })
   } catch (error) {
     console.error("Stripe checkout error:", error)
 
