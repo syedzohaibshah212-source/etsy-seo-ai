@@ -5,21 +5,43 @@ const plans = [
   {
     name: "Free",
     price: "$0",
-    text: "Perfect for testing EtsySEO AI.",
-    features: ["5 AI generations", "Basic SEO title", "13 Etsy tags"],
+    text: "Perfect for new Etsy sellers testing AI SEO optimization.",
+    features: [
+      "5 AI generations",
+      "Basic Etsy SEO scores",
+      "13 AI tags",
+      "Listing audit access",
+      "Keyword suggestions",
+    ],
   },
   {
     name: "Pro",
     price: "$19",
-    text: "Best for active Etsy sellers.",
-    features: ["Unlimited listings", "Advanced SEO copy", "Priority AI quality"],
+    text: "Best for serious Etsy sellers growing traffic and sales.",
+    features: [
+      "Unlimited generations",
+      "Advanced AI SEO engine",
+      "All 12 SEO methods",
+      "Competitor gap analysis",
+      "Advanced keyword opportunities",
+      "Priority AI quality",
+      "Full listing audit system",
+    ],
     featured: true,
   },
   {
     name: "Business",
     price: "$49",
-    text: "For shops managing many products.",
-    features: ["Bulk generation", "CSV export", "Team-ready workflow"],
+    text: "Built for agencies, large Etsy shops and scaling teams.",
+    features: [
+      "Bulk listing generation",
+      "CSV export system",
+      "Team-ready workflow",
+      "Future analytics tools",
+      "Priority support",
+      "High-volume optimization",
+      "Advanced shop management",
+    ],
   },
 ]
 
@@ -27,15 +49,18 @@ export default function PricingPreview() {
   return (
     <section className="pricingPreview">
       <div className="sectionHeader">
-        <span className="sectionBadge">Simple Pricing</span>
+        <span className="sectionBadge">
+          Flexible Etsy seller pricing
+        </span>
 
         <h2 className="sectionTitle">
-          Start Free, Upgrade When You Grow
+          Start Free. Scale Your Etsy Shop Faster.
         </h2>
 
         <p className="sectionText">
-          Choose a plan that fits your Etsy shop. Start with free generations and
-          unlock more power as your store grows.
+          Whether you&apos;re testing your first digital PNG listing or managing
+          thousands of Etsy products, EtsySEO AI helps you generate optimized
+          listings faster with AI-powered SEO analysis.
         </p>
       </div>
 
@@ -43,8 +68,16 @@ export default function PricingPreview() {
         {plans.map((plan) => (
           <Card
             key={plan.name}
-            className={`pricingCard ${plan.featured ? "pricingFeatured" : ""}`}
+            className={`pricingCard ${
+              plan.featured ? "pricingFeatured" : ""
+            }`}
           >
+            {plan.featured && (
+              <div className="pricingPopularBadge">
+                MOST POPULAR
+              </div>
+            )}
+
             <h3>{plan.name}</h3>
 
             <div className="pricingPrice">
@@ -62,11 +95,17 @@ export default function PricingPreview() {
 
             <a href="/pricing">
               <Button className="pricingButton">
-                View Plan
+                {plan.featured
+                  ? "Upgrade To Pro"
+                  : "View Plan"}
               </Button>
             </a>
           </Card>
         ))}
+      </div>
+
+      <div className="pricingBottomText">
+        No contracts. Cancel anytime. Built for Etsy SEO growth.
       </div>
     </section>
   )

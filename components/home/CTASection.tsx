@@ -8,28 +8,51 @@ export default function CTASection() {
         <div className="ctaGlow" />
 
         <span className="ctaBadge">
-          Start Creating Better Etsy Listings
+          Stop Guessing Etsy SEO
         </span>
 
         <h2 className="ctaTitle">
-          Let AI Handle Your Etsy SEO
+          Create Higher Ranking Etsy Listings With AI
         </h2>
 
         <p className="ctaText">
-          Generate optimized Etsy titles, descriptions, tags, categories,
-          materials, occasions, and target audiences in seconds using AI.
+          EtsySEO AI helps Etsy sellers generate optimized titles, keyword-rich
+          tags, AI descriptions, listing audits and SEO scores in minutes
+          instead of hours.
         </p>
+
+        <div className="ctaStats">
+          <div className="ctaStat">
+            <strong>12K+</strong>
+            <span>Listings Generated</span>
+          </div>
+
+          <div className="ctaStat">
+            <strong>3.1M+</strong>
+            <span>Keywords Processed</span>
+          </div>
+
+          <div className="ctaStat">
+            <strong>4.9/5</strong>
+            <span>Seller Rating</span>
+          </div>
+        </div>
 
         <div className="ctaActions">
           <a href="/generate">
             <Button>
-              Generate Listing
+              Generate My Etsy Listing
             </Button>
           </a>
 
-          <a href="/pricing" className="ctaSecondaryBtn">
-            View Pricing
+          <a href="/audit" className="ctaSecondaryBtn">
+            Audit Existing Listing
           </a>
+        </div>
+
+        <div className="ctaBottomText">
+          Built specifically for Etsy digital product sellers, PNG creators and
+          print-on-demand shops.
         </div>
       </Card>
     </section>
