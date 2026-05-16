@@ -1563,3 +1563,47 @@ a {
     grid-column: span 1;
   }
 }
+.featureIconGlow {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.featureIconGlow::before {
+  content: "✦";
+  color: #07111f;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.featureCard:nth-child(1) .featureIconGlow::before {
+  content: "👁";
+}
+
+.featureCard:nth-child(2) .featureIconGlow::before {
+  content: "#";
+}
+
+.featureCard:nth-child(3) .featureIconGlow::before {
+  content: "↗";
+}
+
+.featureCard:nth-child(4) .featureIconGlow::before {
+  content: "⌕";
+}
+
+.featureCard:nth-child(5) .featureIconGlow::before {
+  content: "✓";
+}
+
+.featureCard:nth-child(6) .featureIconGlow::before {
+  content: "⚡";
+}
+
+.featureCard:nth-child(7) .featureIconGlow::before {
+  content: "◇";
+}
+
+.featureCard:nth-child(8) .featureIconGlow::before {
+  content: "T";
+}
