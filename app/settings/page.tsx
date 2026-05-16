@@ -163,6 +163,37 @@ export default function SettingsPage() {
     }
   }
 
+  async function handleBillingPortal() {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      if (!user) return
+
+      const res = await fetch("/api/create-portal-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        setError(data.error || "Failed to open billing portal.")
+      }
+    } catch (err) {
+      console.error(err)
+      setError("Something went wrong.")
+    }
+  }
+
   async function logout() {
     await supabase.auth.signOut()
     router.push("/login")
@@ -293,6 +324,14 @@ export default function SettingsPage() {
           <Link href="/pricing" className="googleButton">
             Manage / Upgrade Plan
           </Link>
+
+          <button
+            type="button"
+            className="googleButton"
+            onClick={handleBillingPortal}
+          >
+            Manage Billing
+          </button>
 
           <button type="button" className="googleButton" onClick={logout}>
             Logout

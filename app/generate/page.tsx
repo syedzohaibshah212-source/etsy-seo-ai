@@ -25,6 +25,14 @@ const seoMethods = [
   "METHOD 12: IP-Safe White Space Strategy",
 ]
 
+function safeArray(value: string[] | undefined) {
+  return Array.isArray(value) ? value : []
+}
+
+function safeScore(value: number | undefined) {
+  return typeof value === "number" ? value : 0
+}
+
 export default function GeneratePage() {
   const router = useRouter()
 
@@ -33,6 +41,7 @@ export default function GeneratePage() {
   const [competitorTitle, setCompetitorTitle] = useState("")
   const [method, setMethod] = useState(seoMethods[0])
   const [loading, setLoading] = useState(false)
+  const [loadingStep, setLoadingStep] = useState("")
   const [pageLoading, setPageLoading] = useState(true)
   const [error, setError] = useState("")
   const [result, setResult] = useState<ListingResult | null>(null)
@@ -40,10 +49,7 @@ export default function GeneratePage() {
   const [plan, setPlan] = useState("Free")
 
   const availableMethods = useMemo(() => {
-    if (plan === "Pro" || plan === "Agency") {
-      return seoMethods
-    }
-
+    if (plan === "Pro" || plan === "Agency") return seoMethods
     return seoMethods.slice(0, 3)
   }, [plan])
 
@@ -68,9 +74,7 @@ export default function GeneratePage() {
         typeof data?.plan === "string" && data.plan ? data.plan : "Free"
 
       setPlan(userPlan)
-      setRemainingCredits(
-        typeof data?.credits === "number" ? data.credits : 5
-      )
+      setRemainingCredits(typeof data?.credits === "number" ? data.credits : 5)
 
       if (userPlan === "Free" && !seoMethods.slice(0, 3).includes(method)) {
         setMethod(seoMethods[0])
@@ -86,6 +90,7 @@ export default function GeneratePage() {
     setImageFile(file)
     setPreview(URL.createObjectURL(file))
     setError("")
+    setResult(null)
   }
 
   async function generateListing() {
@@ -100,7 +105,16 @@ export default function GeneratePage() {
     }
 
     setLoading(true)
+    setLoadingStep("Analyzing product image...")
     setError("")
+
+    const timers = [
+      setTimeout(() => setLoadingStep("Finding Etsy keyword opportunities..."), 1200),
+      setTimeout(() => setLoadingStep("Generating SEO title..."), 2400),
+      setTimeout(() => setLoadingStep("Writing description..."), 3600),
+      setTimeout(() => setLoadingStep("Creating 13 Etsy tags..."), 4800),
+      setTimeout(() => setLoadingStep("Calculating SEO score..."), 6000),
+    ]
 
     try {
       const {
@@ -114,7 +128,6 @@ export default function GeneratePage() {
       }
 
       const formData = new FormData()
-
       formData.append("image", imageFile)
       formData.append("competitorTitle", competitorTitle)
       formData.append("method", method)
@@ -145,7 +158,9 @@ export default function GeneratePage() {
           : "Something went wrong while generating."
       )
     } finally {
+      timers.forEach(clearTimeout)
       setLoading(false)
+      setLoadingStep("")
     }
   }
 
@@ -162,6 +177,15 @@ EtsySEO AI Listing Report
 SEO Score:
 ${result.seoScore}/100
 
+Visibility Score:
+${safeScore(result.visibilityScore)}/100
+
+Competition Score:
+${safeScore(result.competitionScore)}/100
+
+Optimization Score:
+${safeScore(result.optimizationScore)}/100
+
 Optimized Title:
 ${result.title}
 
@@ -169,10 +193,16 @@ Category:
 ${result.category}
 
 Etsy Tags:
-${result.tags.join(", ")}
+${safeArray(result.tags).join(", ")}
+
+Keyword Opportunities:
+${safeArray(result.keywords).join(", ")}
 
 Description:
 ${result.description}
+
+SEO Tips:
+${safeArray(result.tips).join("\n")}
 
 Score Breakdown:
 ${result.scoreBreakdown}
@@ -190,55 +220,26 @@ ${result.scoreFeedback}
     if (!result) return
 
     const doc = new jsPDF()
-    const pageWidth = doc.internal.pageSize.getWidth()
-    const pageHeight = doc.internal.pageSize.getHeight()
-    const margin = 14
-    let y = 18
+    doc.setFontSize(20)
+    doc.text("EtsySEO AI Listing Report", 20, 20)
 
-    function addTitle(text: string) {
-      doc.setFont("helvetica", "bold")
-      doc.setFontSize(18)
-      doc.text(text, margin, y)
-      y += 12
-    }
+    doc.setFontSize(12)
+    doc.text(`SEO Score: ${result.seoScore}/100`, 20, 40)
+    doc.text(`Visibility Score: ${safeScore(result.visibilityScore)}/100`, 20, 50)
+    doc.text(`Competition Score: ${safeScore(result.competitionScore)}/100`, 20, 60)
+    doc.text(`Optimization Score: ${safeScore(result.optimizationScore)}/100`, 20, 70)
 
-    function addSection(title: string, content: string) {
-      if (y > pageHeight - 30) {
-        doc.addPage()
-        y = 18
-      }
-
-      doc.setFont("helvetica", "bold")
-      doc.setFontSize(12)
-      doc.text(title, margin, y)
-      y += 7
-
-      doc.setFont("helvetica", "normal")
-      doc.setFontSize(10)
-
-      const lines = doc.splitTextToSize(content, pageWidth - margin * 2)
-
-      lines.forEach((line: string) => {
-        if (y > pageHeight - 15) {
-          doc.addPage()
-          y = 18
-        }
-
-        doc.text(line, margin, y)
-        y += 5
-      })
-
-      y += 6
-    }
-
-    addTitle("EtsySEO AI Listing Report")
-    addSection("SEO Score", `${result.seoScore}/100`)
-    addSection("Optimized Title", result.title)
-    addSection("Category", result.category)
-    addSection("Etsy Tags", result.tags.join(", "))
-    addSection("Description", result.description)
-    addSection("Score Breakdown", result.scoreBreakdown)
-    addSection("Score Feedback", result.scoreFeedback)
+    doc.text(`Title: ${result.title}`, 20, 88, { maxWidth: 170 })
+    doc.text(`Category: ${result.category}`, 20, 112)
+    doc.text(`Tags: ${safeArray(result.tags).join(", ")}`, 20, 126, {
+      maxWidth: 170,
+    })
+    doc.text(`Keywords: ${safeArray(result.keywords).join(", ")}`, 20, 146, {
+      maxWidth: 170,
+    })
+    doc.text(`Description: ${result.description}`, 20, 170, {
+      maxWidth: 170,
+    })
 
     doc.save("etsy-seo-listing-report.pdf")
   }
@@ -286,8 +287,8 @@ ${result.scoreFeedback}
         <h1>Generate Etsy PNG SEO Listings</h1>
 
         <p>
-          Upload a PNG design, choose one SEO strategy, and generate a title,
-          description, tags, category and SEO score.
+          Upload a PNG design, choose one SEO strategy, and generate a premium
+          Etsy SEO title, description, tags, keywords and ranking score.
         </p>
       </section>
 
@@ -301,8 +302,8 @@ ${result.scoreFeedback}
 
           {plan === "Free" && (
             <p className="generateError">
-              Free plan includes only first 3 SEO methods. Upgrade to Pro for all
-              12 methods.
+              Free plan includes only first 3 SEO methods. Upgrade to Pro for
+              all 12 methods.
             </p>
           )}
 
@@ -340,7 +341,7 @@ ${result.scoreFeedback}
 
           <div className="generateActions">
             <button onClick={generateListing} disabled={loading}>
-              {loading ? "Analyzing PNG..." : "Generate Listing"}
+              {loading ? "AI Optimizing..." : "Generate Listing"}
             </button>
 
             <button type="button" onClick={clearAll} className="clearBtn">
@@ -352,21 +353,68 @@ ${result.scoreFeedback}
         <div className="generatorPanel">
           <h2>SEO Listing Result</h2>
 
-          {!result ? (
-            <div className="emptyResult">
-              <h3>No listing generated yet</h3>
+          {loading ? (
+            <div className="aiLoadingBox">
+              <div className="aiLoader"></div>
+
+              <h3>AI SEO Engine Working...</h3>
+
+              <p>{loadingStep}</p>
+
+              <div className="loadingSteps">
+                <span>Analyzing Product</span>
+                <span>Finding Keywords</span>
+                <span>Writing Title</span>
+                <span>Creating Tags</span>
+                <span>SEO Scoring</span>
+              </div>
+            </div>
+          ) : !result ? (
+            <div className="emptyResult premiumEmpty">
+              <div className="emptyGlow"></div>
+
+              <h3>AI SEO Generator Ready</h3>
 
               <p>
-                Your optimized Etsy title, description, tags, category and SEO
-                score will appear here.
+                Upload your Etsy PNG design and generate a premium
+                SEO-optimized title, tags, description, keyword opportunities
+                and ranking score.
               </p>
+
+              <div className="emptyFeatures">
+                <span>SEO Titles</span>
+                <span>13 Etsy Tags</span>
+                <span>Keyword Opportunities</span>
+                <span>AI SEO Score</span>
+              </div>
             </div>
           ) : (
             <div className="resultBox compactResult">
-              <div className="scoreCard">
+              <div className="scoreCard premiumScore">
                 <span>SEO Score</span>
                 <h3>{result.seoScore}/100</h3>
                 <p>{result.scoreFeedback}</p>
+              </div>
+
+              <div className="resultItem large">
+                <div>
+                  <span>Visibility Score</span>
+                  <p>{safeScore(result.visibilityScore)}/100 estimated search discoverability</p>
+                </div>
+              </div>
+
+              <div className="resultItem large">
+                <div>
+                  <span>Competition Score</span>
+                  <p>{safeScore(result.competitionScore)}/100 niche opportunity score</p>
+                </div>
+              </div>
+
+              <div className="resultItem large">
+                <div>
+                  <span>Optimization Score</span>
+                  <p>{safeScore(result.optimizationScore)}/100 Etsy-ready optimization quality</p>
+                </div>
               </div>
 
               <div className="resultItem large">
@@ -389,15 +437,15 @@ ${result.scoreFeedback}
 
               <div className="tagsResult">
                 <div className="tagsTop">
-                  <span>Etsy Tags</span>
+                  <span>13 Etsy Tags</span>
 
-                  <button onClick={() => copyText(result.tags.join(", "))}>
+                  <button onClick={() => copyText(safeArray(result.tags).join(", "))}>
                     Copy Tags
                   </button>
                 </div>
 
-                <div className="tagList">
-                  {result.tags.map((tag) => (
+                <div className="tagList premiumTags">
+                  {safeArray(result.tags).map((tag) => (
                     <span key={tag}>{tag}</span>
                   ))}
                 </div>
@@ -412,6 +460,43 @@ ${result.scoreFeedback}
                 <button onClick={() => copyText(result.description)}>
                   Copy
                 </button>
+              </div>
+
+              <div className="resultItem large">
+                <div>
+                  <span>Keyword Opportunities</span>
+
+                  <div className="tagList premiumTags">
+                    {safeArray(result.keywords).length > 0
+                      ? safeArray(result.keywords).map((keyword) => (
+                          <span key={keyword}>{keyword}</span>
+                        ))
+                      : safeArray(result.tags).slice(0, 6).map((tag) => (
+                          <span key={tag}>{tag}</span>
+                        ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="resultItem large">
+                <div>
+                  <span>SEO Optimization Tips</span>
+
+                  <ul className="tipsList">
+                    {safeArray(result.tips).length > 0 ? (
+                      safeArray(result.tips).map((tip) => (
+                        <li key={tip}>{tip}</li>
+                      ))
+                    ) : (
+                      <>
+                        <li>Use all 13 Etsy tags for maximum discoverability.</li>
+                        <li>Keep important keywords near the beginning of title.</li>
+                        <li>Use long-tail buyer intent phrases.</li>
+                        <li>Refresh seasonal keywords regularly.</li>
+                      </>
+                    )}
+                  </ul>
+                </div>
               </div>
 
               <div className="resultItem large">

@@ -12,8 +12,8 @@ type UserData = {
 }
 
 type ProfileData = {
-  plan: string
-  credits: number
+  plan: string | null
+  credits: number | null
 }
 
 type ListingPreview = {
@@ -26,69 +26,99 @@ export default function DashboardPage() {
   const router = useRouter()
 
   const [user, setUser] = useState<UserData | null>(null)
-  const [profile, setProfile] = useState<ProfileData>({
+  const [profile, setProfile] = useState({
     plan: "Free",
     credits: 5,
   })
   const [listingsCount, setListingsCount] = useState(0)
   const [recentListings, setRecentListings] = useState<ListingPreview[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
 
   useEffect(() => {
+    let mounted = true
+
     async function loadDashboard() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
+      try {
+        setLoading(true)
+        setError("")
 
-      if (!user) {
-        router.push("/login")
-        return
-      }
+        const {
+          data: { user },
+          error: authError,
+        } = await supabase.auth.getUser()
 
-      const fullName =
-        typeof user.user_metadata?.full_name === "string"
-          ? user.user_metadata.full_name
-          : "EtsySEO User"
+        if (authError || !user) {
+          router.push("/login")
+          return
+        }
 
-      setUser({
-        id: user.id,
-        email: user.email || "",
-        fullName,
-      })
+        const fullName =
+          typeof user.user_metadata?.full_name === "string"
+            ? user.user_metadata.full_name
+            : "EtsySEO User"
 
-      const { data: profileData } = await supabase
-        .from("profiles")
-        .select("plan, credits")
-        .eq("id", user.id)
-        .single()
+        if (!mounted) return
 
-      if (profileData) {
-        setProfile({
-          plan: profileData.plan || "Free",
-          credits:
-            typeof profileData.credits === "number" ? profileData.credits : 5,
+        setUser({
+          id: user.id,
+          email: user.email || "",
+          fullName,
         })
+
+        const { data: profileData, error: profileError } = await supabase
+          .from("profiles")
+          .select("plan, credits")
+          .eq("id", user.id)
+          .maybeSingle<ProfileData>()
+
+        if (!profileError && profileData && mounted) {
+          setProfile({
+            plan: profileData.plan || "Free",
+            credits:
+              typeof profileData.credits === "number"
+                ? profileData.credits
+                : 5,
+          })
+        }
+
+        const { count, error: countError } = await supabase
+          .from("listings")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", user.id)
+
+        if (!countError && mounted) {
+          setListingsCount(count || 0)
+        }
+
+        const { data: recentData, error: recentError } = await supabase
+          .from("listings")
+          .select("id, title, created_at")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(3)
+
+        if (!recentError && mounted) {
+          setRecentListings(recentData || [])
+        }
+      } catch (err) {
+        console.error("Dashboard load error:", err)
+
+        if (mounted) {
+          setError("Dashboard could not load. Please refresh the page.")
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false)
+        }
       }
-
-      const { count } = await supabase
-        .from("listings")
-        .select("*", { count: "exact", head: true })
-        .eq("user_id", user.id)
-
-      setListingsCount(count || 0)
-
-      const { data: recentData } = await supabase
-        .from("listings")
-        .select("id, title, created_at")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(3)
-
-      setRecentListings(recentData || [])
-      setLoading(false)
     }
 
     loadDashboard()
+
+    return () => {
+      mounted = false
+    }
   }, [router])
 
   async function handleLogout() {
@@ -109,6 +139,25 @@ export default function DashboardPage() {
       <main className="dashboardPage">
         <section className="dashboardContent">
           <h1>Loading dashboard...</h1>
+        </section>
+      </main>
+    )
+  }
+
+  if (error) {
+    return (
+      <main className="dashboardPage">
+        <section className="dashboardContent">
+          <h1>Dashboard Error</h1>
+          <p>{error}</p>
+
+          <button
+            type="button"
+            className="primaryBtn"
+            onClick={() => window.location.reload()}
+          >
+            Refresh
+          </button>
         </section>
       </main>
     )

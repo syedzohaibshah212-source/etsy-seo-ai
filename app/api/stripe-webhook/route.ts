@@ -19,7 +19,6 @@ export async function POST(req: Request) {
     }
 
     const stripe = new Stripe(stripeSecretKey)
-
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey)
 
     const body = await req.text()
@@ -49,12 +48,18 @@ export async function POST(req: Request) {
       const plan = amount >= 2900 ? "Agency" : "Pro"
       const credits = plan === "Agency" ? 2000 : 500
 
+      const customerId =
+        typeof session.customer === "string"
+          ? session.customer
+          : session.customer?.id || ""
+
       if (email) {
         await supabaseAdmin
           .from("profiles")
           .update({
             plan,
             credits,
+            stripe_customer_id: customerId,
           })
           .eq("email", email)
       }
@@ -76,6 +81,7 @@ export async function POST(req: Request) {
           .update({
             plan: "Free",
             credits: 5,
+            stripe_customer_id: null,
           })
           .eq("email", customer.email)
       }

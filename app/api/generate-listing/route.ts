@@ -10,6 +10,11 @@ type ListingData = {
   tags: string[]
   category: string
   seoScore: number
+  visibilityScore: number
+  competitionScore: number
+  optimizationScore: number
+  keywords: string[]
+  tips: string[]
   scoreBreakdown: string
   scoreFeedback: string
 }
@@ -24,16 +29,12 @@ function cleanText(value: FormDataEntryValue | null) {
 }
 
 function parseAIResponse(response: string): unknown {
-  try {
-    return JSON.parse(response)
-  } catch {
-    const cleaned = response
-      .replace(/```json/g, "")
-      .replace(/```/g, "")
-      .trim()
+  const cleaned = response
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .trim()
 
-    return JSON.parse(cleaned)
-  }
+  return JSON.parse(cleaned)
 }
 
 function toText(value: unknown) {
@@ -61,17 +62,38 @@ function toStringArray(value: unknown) {
   })
 }
 
+function normalizeTags(value: unknown) {
+  const tags = toStringArray(value)
+    .map((tag) => tag.trim())
+    .filter(Boolean)
+    .map((tag) => (tag.length > 20 ? tag.slice(0, 20).trim() : tag))
+    .slice(0, 13)
+
+  while (tags.length < 13) {
+    tags.push(`etsy seo ${tags.length + 1}`)
+  }
+
+  return tags.slice(0, 13)
+}
+
 function normalizeListingData(data: Record<string, unknown>): ListingData {
   return {
     title: toText(data.title).slice(0, 140),
     description: toText(data.description),
-    tags: toStringArray(data.tags)
-      .map((tag) => tag.trim())
-      .filter(Boolean)
-      .map((tag) => (tag.length > 20 ? tag.slice(0, 20).trim() : tag))
-      .slice(0, 13),
-    category: toText(data.category),
+    tags: normalizeTags(data.tags),
+    category: toText(data.category) || "Digital Prints",
     seoScore: toScore(data.seoScore),
+    visibilityScore: toScore(data.visibilityScore),
+    competitionScore: toScore(data.competitionScore),
+    optimizationScore: toScore(data.optimizationScore),
+    keywords: toStringArray(data.keywords)
+      .map((keyword) => keyword.trim())
+      .filter(Boolean)
+      .slice(0, 10),
+    tips: toStringArray(data.tips)
+      .map((tip) => tip.trim())
+      .filter(Boolean)
+      .slice(0, 6),
     scoreBreakdown: toText(data.scoreBreakdown),
     scoreFeedback: toText(data.scoreFeedback),
   }
@@ -230,7 +252,44 @@ export async function POST(req: Request) {
     const imageDataUrl = await fileToDataUrl(image)
 
     const aiResponse = await generateAIListing(prompt, imageDataUrl)
-    const parsedData = parseAIResponse(aiResponse) as Record<string, unknown>
+
+    console.log("RAW AI RESPONSE:", aiResponse)
+
+    if (
+      !aiResponse ||
+      aiResponse.startsWith("<!DOCTYPE") ||
+      aiResponse.startsWith("Request") ||
+      aiResponse.startsWith("Error") ||
+      aiResponse.includes("Request Entity Too Large")
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "AI provider returned an invalid response. Try again with a smaller image.",
+        },
+        { status: 500 }
+      )
+    }
+
+    let parsedData: Record<string, unknown>
+
+    try {
+      parsedData = parseAIResponse(aiResponse) as Record<string, unknown>
+    } catch (parseError) {
+      console.error("AI JSON parse error:", parseError)
+      console.error("Invalid AI response:", aiResponse)
+
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "AI returned invalid JSON. Please try again with a clearer/smaller image.",
+        },
+        { status: 500 }
+      )
+    }
+
     const data = normalizeListingData(parsedData)
 
     const { data: savedListing, error: listingError } = await supabase
@@ -242,6 +301,11 @@ export async function POST(req: Request) {
         category: data.category,
         tags: data.tags,
         seo_score: data.seoScore,
+        visibility_score: data.visibilityScore,
+        competition_score: data.competitionScore,
+        optimization_score: data.optimizationScore,
+        keywords: data.keywords,
+        tips: data.tips,
         score_breakdown: data.scoreBreakdown,
         score_feedback: data.scoreFeedback,
       })
