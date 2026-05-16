@@ -1580,3 +1580,17 @@ a {
     line-height: 1.65 !important;
   }
 }
+.brand img,
+.generateNav img,
+.historyNav img,
+.dashboardLogo img {
+  width: 160px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+}
