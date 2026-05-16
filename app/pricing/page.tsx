@@ -1,10 +1,90 @@
 "use client"
 
 import Link from "next/link"
+import { useState } from "react"
+
+type PaidPlan = "starter" | "pro" | "agency"
+
+const plans = [
+  {
+    name: "Free",
+    price: "$0",
+    label: "Start testing",
+    description: "For trying EtsySEO AI before upgrading.",
+    features: [
+      "5 AI generations",
+      "Basic Etsy SEO score",
+      "13 Etsy tags",
+      "Listing audit access",
+      "History access",
+    ],
+    button: "Start Free",
+    href: "/signup",
+    type: "free",
+  },
+  {
+    name: "Starter",
+    price: "$9",
+    label: "For new sellers",
+    description: "Best for small Etsy shops getting started.",
+    features: [
+      "100 AI generations/month",
+      "SEO title generator",
+      "13 optimized Etsy tags",
+      "Listing audit tool",
+      "Keyword opportunities",
+      "Saved history",
+    ],
+    button: "Start Starter",
+    plan: "starter",
+    type: "paid",
+  },
+  {
+    name: "Pro",
+    price: "$19",
+    label: "Most Popular",
+    description: "For active Etsy sellers growing traffic.",
+    features: [
+      "500 AI generations/month",
+      "All 12 SEO methods",
+      "Advanced SEO scoring",
+      "Competitor title analysis",
+      "CSV export",
+      "Priority AI quality",
+      "Future Etsy URL audit",
+    ],
+    button: "Upgrade Pro",
+    plan: "pro",
+    type: "paid",
+    featured: true,
+  },
+  {
+    name: "Agency",
+    price: "$49",
+    label: "For scale",
+    description: "For large shops, teams and agencies.",
+    features: [
+      "2,000 AI generations/month",
+      "Bulk listing workflow",
+      "CSV export",
+      "Multiple shop workflow",
+      "Priority support",
+      "Advanced analytics soon",
+      "Team-ready structure",
+    ],
+    button: "Start Agency",
+    plan: "agency",
+    type: "paid",
+  },
+]
 
 export default function PricingPage() {
-  async function checkout(plan: "pro" | "agency") {
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null)
+
+  async function checkout(plan: PaidPlan) {
     try {
+      setLoadingPlan(plan)
+
       const response = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: {
@@ -25,6 +105,8 @@ export default function PricingPage() {
       }
     } catch {
       alert("Something went wrong while opening checkout.")
+    } finally {
+      setLoadingPlan(null)
     }
   }
 
@@ -38,100 +120,85 @@ export default function PricingPage() {
         <div className="navLinks">
           <Link href="/">Home</Link>
           <Link href="/generate">Generator</Link>
+          <Link href="/audit">Audit</Link>
+          <Link href="/history">History</Link>
           <Link href="/dashboard">Dashboard</Link>
           <Link href="/login">Login</Link>
         </div>
       </nav>
 
       <section className="pricingHero">
-        <span className="heroBadge">Simple Pricing</span>
+        <span className="heroBadge">Simple Etsy SEO Pricing</span>
 
         <h1>
           Choose the plan that fits your <span>Etsy growth</span>
         </h1>
 
         <p>
-          Start free and upgrade when you need more generations, saved history,
-          CSV exports and bulk Etsy SEO tools.
+          Start free, then upgrade when you need more AI generations, listing
+          audits, advanced SEO methods, CSV exports and scalable Etsy seller
+          workflows.
         </p>
       </section>
 
-      <section className="pricingFullGrid">
-        <div className="pricingPlan">
-          <h3>Free</h3>
+      <section className="pricingFullGrid pricingFourGrid">
+        {plans.map((plan) => (
+          <div
+            key={plan.name}
+            className={`pricingPlan ${plan.featured ? "featuredPlan" : ""}`}
+          >
+            <div className={plan.featured ? "popularBadge" : "planBadge"}>
+              {plan.label}
+            </div>
 
-          <p className="planDesc">Best for testing the tool.</p>
+            <h3>{plan.name}</h3>
 
-          <div className="planPrice">
-            $0 <span>/ month</span>
+            <p className="planDesc">{plan.description}</p>
+
+            <div className="planPrice">
+              {plan.price} <span>/ month</span>
+            </div>
+
+            <ul>
+              {plan.features.map((feature) => (
+                <li key={feature}>{feature}</li>
+              ))}
+            </ul>
+
+            {plan.type === "free" ? (
+              <Link href={plan.href || "/signup"} className="secondaryBtn">
+                {plan.button}
+              </Link>
+            ) : (
+              <button
+                type="button"
+                className={plan.featured ? "primaryBtn" : "secondaryBtn"}
+                onClick={() => checkout(plan.plan as PaidPlan)}
+                disabled={loadingPlan === plan.plan}
+              >
+                {loadingPlan === plan.plan ? "Opening..." : plan.button}
+              </button>
+            )}
           </div>
+        ))}
+      </section>
 
-          <ul>
-            <li>5 AI generations/month</li>
-            <li>Basic SEO titles</li>
-            <li>13 Etsy tags</li>
-            <li>Image upload</li>
-            <li>Copy buttons</li>
-          </ul>
-
-          <Link href="/generate" className="secondaryBtn">
-            Start Free
-          </Link>
+      <section className="pricingFaq">
+        <div>
+          <h3>Can I cancel anytime?</h3>
+          <p>Yes. Plans are monthly and can be cancelled anytime.</p>
         </div>
 
-        <div className="pricingPlan featuredPlan">
-          <div className="popularBadge">Most Popular</div>
-
-          <h3>Pro</h3>
-
-          <p className="planDesc">For serious Etsy sellers.</p>
-
-          <div className="planPrice">
-            $9 <span>/ month</span>
-          </div>
-
-          <ul>
-            <li>500 AI generations/month</li>
-            <li>Advanced SEO methods</li>
-            <li>Listing history</li>
-            <li>CSV export</li>
-            <li>Priority AI generation</li>
-            <li>Future competitor insights</li>
-          </ul>
-
-          <button
-            type="button"
-            className="primaryBtn"
-            onClick={() => checkout("pro")}
-          >
-            Upgrade Pro
-          </button>
+        <div>
+          <h3>Do credits reset monthly?</h3>
+          <p>Yes. Paid plan credits reset every billing cycle.</p>
         </div>
 
-        <div className="pricingPlan">
-          <h3>Agency</h3>
-
-          <p className="planDesc">For shops and teams.</p>
-
-          <div className="planPrice">
-            $29 <span>/ month</span>
-          </div>
-
-          <ul>
-            <li>Bulk listing generation</li>
-            <li>CSV exports</li>
-            <li>Multiple shop support</li>
-            <li>Team workflow</li>
-            <li>Premium support</li>
-          </ul>
-
-          <button
-            type="button"
-            className="secondaryBtn"
-            onClick={() => checkout("agency")}
-          >
-            Start Agency
-          </button>
+        <div>
+          <h3>Is this only for PNG sellers?</h3>
+          <p>
+            It is optimized for PNG, POD, digital downloads and Etsy listing SEO.
+          </p>
         </div>
       </section>
     </main>
