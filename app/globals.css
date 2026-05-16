@@ -24,9 +24,13 @@ body {
   color: var(--text-main);
   font-family: Arial, Helvetica, sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(245, 184, 91, 0.16), transparent 34%),
-    radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.14), transparent 34%),
-    linear-gradient(180deg, #162238 0%, #101827 48%, #111827 100%);
+    radial-gradient(circle at top left, rgba(245, 184, 91, 0.14), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.13), transparent 34%),
+    linear-gradient(180deg, #101827 0%, #0b1220 54%, #07111f 100%);
+}
+
+body {
+  overflow-x: hidden;
 }
 
 button,
@@ -62,17 +66,27 @@ a {
 .dashboardLogo {
   display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
-.brand img {
-  width: 185px;
+.brand img,
+.navbarLogo img,
+.generateNav img,
+.historyNav img,
+.dashboardLogo img,
+.authLogo img {
+  width: 150px;
+  max-width: 100%;
   height: auto;
+  object-fit: contain;
   display: block;
 }
 
 .primaryBtn,
 .navCta,
 .primaryButton {
+  position: relative;
+  overflow: hidden;
   border: 0;
   border-radius: 999px;
   padding: 12px 18px;
@@ -83,10 +97,27 @@ a {
   transition: 0.25s ease;
 }
 
+.primaryBtn::before,
+.primaryButton::before,
+.navCta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: translateX(-120%);
+  transition: 0.7s ease;
+}
+
 .primaryBtn:hover,
 .navCta:hover,
 .primaryButton:hover {
   transform: translateY(-2px);
+}
+
+.primaryBtn:hover::before,
+.primaryButton:hover::before,
+.navCta:hover::before {
+  transform: translateX(120%);
 }
 
 .secondaryBtn {
@@ -105,57 +136,55 @@ a {
 }
 
 .glassCard {
-  background: var(--card);
+  background:
+    radial-gradient(circle at top right, rgba(245, 184, 91, 0.08), transparent 35%),
+    radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.07), transparent 38%),
+    var(--card);
   border: 1px solid var(--border);
-  backdrop-filter: blur(14px);
-  border-radius: 24px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.22);
-  transition: all 0.25s ease;
+  backdrop-filter: blur(18px);
+  border-radius: 28px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.24);
+  transition: 0.28s ease;
 }
 
 .glassCard:hover {
   transform: translateY(-3px);
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(245, 184, 91, 0.22);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.3);
 }
 
 /* NAVBAR */
 
 .navbar {
   width: 100%;
-  padding: 26px 24px;
-  position: absolute;
-  top: 0;
-  left: 0;
+  padding: 24px;
+  position: relative;
   z-index: 50;
 }
 
 .navbarInner {
-  width: 100%;
-  max-width: 1240px;
+  width: min(1240px, 100%);
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.navbarLogo img {
-  width: 145px;
-  height: auto;
-  display: block;
+  gap: 24px;
 }
 
 .navbarLinks {
   display: flex;
   align-items: center;
-  gap: 26px;
+  justify-content: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
 }
 
 .navbarLinks a {
   color: var(--text-main);
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 800;
   opacity: 0.86;
-  transition: all 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .navbarLinks a:hover {
@@ -168,14 +197,17 @@ a {
   border-radius: 999px;
 }
 
-/* SHARED NAV LINKS */
-
 .navLinks {
   display: flex;
   align-items: center;
   gap: 24px;
   color: var(--text-muted);
   font-size: 14px;
+  flex-wrap: wrap;
+}
+
+.navLinks a {
+  font-weight: 800;
 }
 
 .navLinks a:hover {
@@ -185,48 +217,54 @@ a {
 /* HOME HERO */
 
 .heroSection {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 150px 24px 80px;
+  min-height: auto;
+  display: block;
+  padding: 54px 0 90px;
 }
 
 .heroCard {
-  max-width: 900px;
-  width: 100%;
+  width: min(1180px, 100%);
   margin: 0 auto;
-  padding: 58px;
+  padding: clamp(34px, 6vw, 76px) clamp(20px, 5vw, 60px);
   text-align: center;
   position: relative;
   overflow: hidden;
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at top right, rgba(245, 184, 91, 0.13), transparent 35%),
+    radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.12), transparent 38%),
+    rgba(255, 255, 255, 0.06);
 }
 
 .heroCard::before,
 .heroCard::after {
   content: "";
   position: absolute;
-  width: 260px;
-  height: 260px;
+  width: 280px;
+  height: 280px;
   pointer-events: none;
+  border-radius: 999px;
+  filter: blur(6px);
 }
 
 .heroCard::before {
-  top: -90px;
-  right: -80px;
+  top: -100px;
+  right: -90px;
   background: radial-gradient(circle, rgba(245, 184, 91, 0.25), transparent 70%);
 }
 
 .heroCard::after {
-  bottom: -90px;
-  left: -80px;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.22), transparent 70%);
+  bottom: -110px;
+  left: -90px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.24), transparent 70%);
 }
 
 .heroBadge,
 .sectionBadge,
 .ctaBadge,
 .authBadge {
+  position: relative;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -237,22 +275,28 @@ a {
   border: 1px solid var(--border);
   color: var(--primary);
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 900;
   letter-spacing: 0.3px;
 }
 
 .heroTitle {
-  max-width: 780px;
+  position: relative;
+  z-index: 2;
+  max-width: 1000px;
   margin: 0 auto;
-  font-size: clamp(42px, 6vw, 72px);
-  line-height: 1.04;
+  font-size: clamp(42px, 6.2vw, 82px);
+  line-height: 1.03;
   font-weight: 900;
   letter-spacing: -2px;
   color: var(--text-main);
+  text-wrap: balance;
+  text-shadow: 0 0 24px rgba(245, 184, 91, 0.08);
 }
 
 .heroText {
-  max-width: 680px;
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
   margin: 24px auto 0;
   font-size: 18px;
   line-height: 1.75;
@@ -261,6 +305,8 @@ a {
 
 .heroActions,
 .ctaActions {
+  position: relative;
+  z-index: 2;
   margin-top: 34px;
   display: flex;
   align-items: center;
@@ -272,24 +318,26 @@ a {
 .heroSecondaryBtn,
 .ctaSecondaryBtn {
   padding: 14px 22px;
-  border-radius: 16px;
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid var(--border);
   color: var(--text-main);
   font-size: 15px;
-  font-weight: 800;
-  transition: all 0.25s ease;
+  font-weight: 900;
+  transition: 0.25s ease;
 }
 
 .heroSecondaryBtn:hover,
 .ctaSecondaryBtn:hover {
   transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.22);
+  border-color: rgba(245, 184, 91, 0.3);
   color: var(--primary);
 }
 
 .heroStats {
-  margin-top: 34px;
+  position: relative;
+  z-index: 2;
+  margin: 34px auto 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -304,17 +352,80 @@ a {
   border: 1px solid var(--border);
   color: var(--text-muted);
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 800;
+  backdrop-filter: blur(12px);
 }
 
-/* FEATURES */
+.heroPreview {
+  position: relative;
+  z-index: 2;
+  width: min(760px, 100%);
+  margin: 38px auto 0;
+  padding: 24px;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.12), transparent 42%),
+    rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
+}
+
+.heroPreviewTop,
+.heroPreviewBottom {
+  display: grid;
+  gap: 8px;
+}
+
+.heroPreviewTop span,
+.heroPreviewBottom span {
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+.heroPreviewTop p,
+.heroPreviewBottom p {
+  margin: 0;
+  color: var(--text-main);
+  line-height: 1.6;
+  font-weight: 800;
+}
+
+.heroPreviewArrow {
+  text-align: center;
+  margin: 14px 0;
+  color: var(--secondary);
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.heroPreviewTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.heroPreviewTags span {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #bfffe7;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* SECTIONS */
 
 .featuresSection {
-  padding: 40px 0 100px;
+  padding: 70px 0 100px;
 }
 
 .sectionHeader {
-  max-width: 760px;
+  max-width: 800px;
   margin: 0 auto 44px;
   text-align: center;
 }
@@ -325,11 +436,12 @@ a {
 
 .sectionTitle {
   margin: 0;
-  font-size: clamp(34px, 5vw, 54px);
+  font-size: clamp(34px, 5vw, 56px);
   line-height: 1.08;
   font-weight: 900;
   letter-spacing: -1.5px;
   color: var(--text-main);
+  text-wrap: balance;
 }
 
 .sectionText {
@@ -341,13 +453,24 @@ a {
 
 .featuresGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 22px;
 }
 
 .featureCard {
+  position: relative;
+  overflow: hidden;
   padding: 28px;
-  min-height: 210px;
+  min-height: 230px;
+}
+
+.featureIconGlow {
+  width: 42px;
+  height: 42px;
+  margin-bottom: 18px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(245, 184, 91, 0.35), rgba(16, 185, 129, 0.24));
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .featureCard h3 {
@@ -364,6 +487,40 @@ a {
   color: var(--text-muted);
 }
 
+.featureBottomStats,
+.ctaStats {
+  margin: 38px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  width: min(900px, 100%);
+}
+
+.featureStatCard,
+.ctaStat {
+  padding: 22px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.featureStatCard strong,
+.ctaStat strong {
+  display: block;
+  font-size: 34px;
+  color: var(--primary);
+}
+
+.featureStatCard span,
+.ctaStat span {
+  display: block;
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-weight: 800;
+  font-size: 13px;
+}
+
 /* PRICING PAGE */
 
 .pricingPage {
@@ -371,23 +528,27 @@ a {
   overflow: hidden;
 }
 
-.pricingNav {
+.pricingNav,
+.historyNav {
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
   padding: 22px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 24px;
 }
 
-.pricingHero {
+.pricingHero,
+.historyHero {
   width: min(980px, calc(100% - 32px));
   margin: 70px auto 0;
   text-align: center;
   padding: 50px 20px;
 }
 
-.pricingHero h1 {
+.pricingHero h1,
+.historyHero h1 {
   max-width: 880px;
   margin: 0 auto;
   font-size: clamp(42px, 7vw, 76px);
@@ -403,7 +564,8 @@ a {
   color: transparent;
 }
 
-.pricingHero p {
+.pricingHero p,
+.historyHero p {
   max-width: 700px;
   margin: 24px auto 0;
   color: var(--text-muted);
@@ -437,11 +599,12 @@ a {
   transform: translateY(-12px);
 }
 
-.popularBadge {
-  position: absolute;
-  top: 18px;
-  right: 18px;
+.popularBadge,
+.pricingPopularBadge {
+  display: inline-flex;
+  width: fit-content;
   padding: 7px 12px;
+  margin-bottom: 16px;
   border-radius: 999px;
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: #07111f;
@@ -449,9 +612,11 @@ a {
   font-weight: 900;
 }
 
-.pricingPlan h3 {
-  margin: 0;
+.pricingPlan h3,
+.pricingCard h3 {
+  margin: 0 0 18px;
   font-size: 30px;
+  font-weight: 900;
 }
 
 .planDesc {
@@ -459,37 +624,48 @@ a {
   margin: 10px 0 22px;
 }
 
-.planPrice {
-  font-size: 50px;
+.planPrice,
+.pricingPrice {
+  margin-bottom: 18px;
+  font-size: 54px;
+  line-height: 1;
   font-weight: 900;
-  margin-bottom: 24px;
   color: var(--primary);
 }
 
-.planPrice span {
-  font-size: 15px;
-  color: var(--text-muted);
+.planPrice span,
+.pricingPrice span {
+  margin-left: 6px;
+  font-size: 16px;
   font-weight: 700;
+  color: var(--text-muted);
 }
 
-.pricingPlan ul {
+.pricingPlan ul,
+.pricingCard ul {
   list-style: none;
   padding: 0;
-  margin: 0 0 28px;
+  margin: 0 0 34px;
   display: grid;
   gap: 14px;
 }
 
-.pricingPlan li {
-  color: var(--text-muted);
-  line-height: 1.5;
+.pricingPlan li,
+.pricingCard li {
+  display: flex;
+  align-items: flex-start;
+  color: var(--text-main);
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 700;
 }
 
-.pricingPlan li::before {
+.pricingPlan li::before,
+.pricingCard li::before {
   content: "✓";
-  color: var(--primary);
-  font-weight: 900;
   margin-right: 10px;
+  color: var(--secondary);
+  font-weight: 900;
 }
 
 .pricingPlan .primaryBtn,
@@ -499,14 +675,16 @@ a {
   justify-content: center;
 }
 
-/* PRICING PREVIEW FIXED */
+/* PRICING PREVIEW */
 
 .pricingPreview {
   width: min(1240px, calc(100% - 32px));
   margin: 90px auto 110px;
-  padding: 60px;
+  padding: clamp(28px, 5vw, 60px);
   border-radius: 36px;
-  background: rgba(255, 255, 255, 0.05);
+  background:
+    radial-gradient(circle at top left, rgba(245, 184, 91, 0.09), transparent 34%),
+    rgba(255, 255, 255, 0.05);
   border: 1px solid var(--border);
   backdrop-filter: blur(18px);
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
@@ -515,7 +693,6 @@ a {
 .pricingPreview .sectionHeader {
   max-width: 760px;
   margin: 0 auto 60px;
-  text-align: center;
 }
 
 .pricingGrid {
@@ -532,62 +709,10 @@ a {
   padding: 34px 30px;
   border-radius: 30px;
   background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(16px);
-  transition: all 0.28s ease;
+  transition: 0.28s ease;
   overflow: hidden;
-}
-
-.pricingCard:hover {
-  transform: translateY(-6px);
-  border-color: rgba(245, 184, 91, 0.28);
-  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.24);
-}
-
-.pricingFeatured {
-  transform: translateY(-10px);
-  border-color: rgba(245, 184, 91, 0.45);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.05));
-  box-shadow: 0 24px 70px rgba(245, 184, 91, 0.16);
-}
-
-.pricingFeatured::before {
-  content: "Most Popular";
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background:
-    linear-gradient(135deg, rgba(245, 184, 91, 0.22), rgba(16, 185, 129, 0.22));
-  border: 1px solid rgba(245, 184, 91, 0.35);
-  color: var(--primary);
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 0.3px;
-}
-
-.pricingCard h3 {
-  margin: 0 0 18px;
-  font-size: 30px;
-  font-weight: 900;
-  color: var(--text-main);
-}
-
-.pricingPrice {
-  margin-bottom: 18px;
-  font-size: 58px;
-  line-height: 1;
-  font-weight: 900;
-  color: var(--primary);
-}
-
-.pricingPrice span {
-  margin-left: 6px;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text-muted);
 }
 
 .pricingCard p {
@@ -597,34 +722,24 @@ a {
   line-height: 1.75;
 }
 
-.pricingCard ul {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 34px;
-  display: grid;
-  gap: 14px;
-  flex: 1;
-}
-
-.pricingCard li {
-  display: flex;
-  align-items: flex-start;
-  color: var(--text-main);
-  font-size: 15px;
-  line-height: 1.6;
-  font-weight: 700;
-}
-
-.pricingCard li::before {
-  content: "✓";
-  margin-right: 10px;
-  color: var(--secondary);
-  font-weight: 900;
+.pricingFeatured {
+  border-color: rgba(245, 184, 91, 0.45);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.05));
+  box-shadow: 0 24px 70px rgba(245, 184, 91, 0.16);
 }
 
 .pricingButton {
   width: 100%;
   margin-top: auto;
+}
+
+.pricingBottomText,
+.ctaBottomText {
+  margin-top: 26px;
+  text-align: center;
+  color: var(--text-muted);
+  font-weight: 800;
 }
 
 /* CTA */
@@ -636,9 +751,9 @@ a {
 .ctaCard {
   position: relative;
   overflow: hidden;
-  padding: 70px 40px;
+  padding: clamp(44px, 6vw, 76px) clamp(22px, 5vw, 44px);
   text-align: center;
-  max-width: 980px;
+  width: min(980px, 100%);
   margin: 0 auto;
 }
 
@@ -650,11 +765,13 @@ a {
   left: 50%;
   transform: translate(-50%, -50%);
   background:
-    radial-gradient(circle, rgba(245, 184, 91, 0.14), rgba(16, 185, 129, 0.10), transparent 70%);
+    radial-gradient(circle, rgba(245, 184, 91, 0.14), rgba(16, 185, 129, 0.1), transparent 70%);
   pointer-events: none;
 }
 
 .ctaTitle {
+  position: relative;
+  z-index: 2;
   font-size: clamp(38px, 5vw, 64px);
   line-height: 1.05;
   font-weight: 900;
@@ -665,6 +782,8 @@ a {
 }
 
 .ctaText {
+  position: relative;
+  z-index: 2;
   max-width: 680px;
   margin: 24px auto 0;
   color: var(--text-muted);
@@ -672,15 +791,10 @@ a {
   line-height: 1.8;
 }
 
-.ctaSection .ctaCard {
-  display: block;
-  text-align: center;
-}
-
-.ctaSection .ctaBadge,
-.ctaSection .ctaTitle,
-.ctaSection .ctaText,
-.ctaSection .ctaActions {
+.ctaStats,
+.ctaActions,
+.ctaBottomText,
+.ctaBadge {
   position: relative;
   z-index: 2;
 }
@@ -715,9 +829,6 @@ a {
 
 .authLogo img {
   width: 170px;
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
 }
 
 .authLeft h1 {
@@ -856,10 +967,6 @@ a {
 
 .dashboardLogo img {
   width: 130px;
-  max-width: 100%;
-  height: auto;
-  display: block;
-  object-fit: contain;
 }
 
 .dashboardMenu {
@@ -1035,38 +1142,6 @@ a {
   overflow: hidden;
 }
 
-.historyNav {
-  width: min(1180px, calc(100% - 32px));
-  margin: 0 auto;
-  padding: 22px 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.historyHero {
-  width: min(980px, calc(100% - 32px));
-  margin: 70px auto 0;
-  text-align: center;
-  padding: 50px 20px;
-}
-
-.historyHero h1 {
-  max-width: 880px;
-  margin: 0 auto;
-  font-size: clamp(42px, 7vw, 76px);
-  line-height: 0.98;
-  letter-spacing: -3px;
-}
-
-.historyHero p {
-  max-width: 700px;
-  margin: 24px auto 28px;
-  color: var(--text-muted);
-  font-size: 18px;
-  line-height: 1.7;
-}
-
 .historyGrid {
   width: min(1180px, calc(100% - 32px));
   margin: 30px auto 80px;
@@ -1132,13 +1207,23 @@ a {
   color: #bfffe7;
   font-size: 13px;
   font-weight: 800;
+  backdrop-filter: blur(12px);
 }
 
 /* FOOTER */
 
 .footer {
+  position: relative;
   padding: 80px 0 30px;
   background: transparent;
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(245, 184, 91, 0.05), transparent 60%);
+  pointer-events: none;
 }
 
 .footer .container {
@@ -1213,6 +1298,12 @@ a {
 
 /* RESPONSIVE */
 
+@media (max-width: 1180px) {
+  .featuresGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 980px) {
   .featuresGrid,
   .pricingGrid,
@@ -1264,131 +1355,64 @@ a {
 }
 
 @media (max-width: 900px) {
+  .navbar,
   .pricingNav,
   .historyNav {
-    flex-direction: column;
-    gap: 18px;
-  }
-}
-
-@media (max-width: 850px) {
-  .navLinks,
-  .navbarLinks {
-    gap: 14px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .brand img {
-    width: 150px;
-  }
-
-  .pricingHero h1,
-  .historyHero h1,
-  .heroTitle,
-  .sectionTitle,
-  .ctaTitle {
-    letter-spacing: -1.5px;
-  }
-
-  .navbarInner {
-    flex-direction: column;
-    gap: 18px;
-  }
-}
-
-@media (max-width: 768px) {
-  .navbar {
-    padding: 18px;
-  }
-
-  .navbarLogo img {
-    width: 120px;
-  }
-
-  .heroSection {
-    padding: 145px 18px 60px;
-  }
-
-  .heroCard {
-    padding: 36px 22px;
-  }
-
-  .heroText,
-  .ctaText {
-    font-size: 16px;
-  }
-
-  .ctaCard {
-    padding: 48px 24px;
-  }
-
-  .historyCardTop {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 640px) {
-  .pricingPreview {
-    padding: 26px 18px;
-  }
-
-  .pricingCard {
-    padding: 28px 22px;
-  }
-
-  .pricingPrice {
-    font-size: 48px;
-  }
-
-  .pricingCard h3 {
-    font-size: 26px;
-  }
-
-  .footerLinks {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .navbar {
     position: relative;
-    padding: 18px 14px 8px;
+    top: auto;
+    left: auto;
+    padding: 18px 14px 26px;
   }
 
-  .navbarInner {
+  .navbarInner,
+  .pricingNav,
+  .historyNav {
+    width: 100%;
+    max-width: 100%;
     flex-direction: column;
-    gap: 14px;
+    gap: 18px;
   }
 
-  .navbarLogo img {
-    width: 125px;
+  .navbarLogo img,
+  .brand img {
+    width: 135px;
   }
 
-  .navbarLinks {
+  .navbarLinks,
+  .navLinks {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
   }
 
-  .navbarLinks a {
-    text-align: center;
+  .navbarLinks a,
+  .navLinks a {
+    width: 100%;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
     font-size: 13px;
-    padding: 10px 8px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    text-align: center;
   }
 
-  .navbarLinks .navbarCta {
+  .navbarLinks a[href="/login"],
+  .navbarLinks a[href="/signup"] {
+    display: none;
+  }
+
+  .navbarLinks .navbarCta,
+  .navLinks .navCta {
     grid-column: span 3;
-    padding: 12px 14px;
   }
 
   .heroSection {
-    padding: 24px 14px 60px;
-    min-height: auto;
+    padding: 18px 0 70px;
   }
 
   .heroCard {
@@ -1397,19 +1421,20 @@ a {
   }
 
   .heroBadge {
+    margin-bottom: 20px;
     font-size: 12px;
-    padding: 8px 12px;
+    padding: 9px 12px;
   }
 
   .heroTitle {
-    font-size: 42px;
-    line-height: 1.05;
+    font-size: 40px;
+    line-height: 1.08;
     letter-spacing: -1px;
   }
 
   .heroText {
     font-size: 16px;
-    line-height: 1.7;
+    line-height: 1.65;
   }
 
   .heroActions {
@@ -1419,406 +1444,7 @@ a {
   .heroActions a,
   .heroActions button {
     width: 100%;
-    max-width: 280px;
-  }
-}
-
-@media (max-width: 430px) {
-  .navbarLinks {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .navbarLinks .navbarCta {
-    grid-column: span 2;
-  }
-
-  .heroTitle {
-    font-size: 38px;
-  }
-
-  .heroCard {
-    margin-top: 10px;
-  }
-}
-@media (max-width: 768px) {
-  .navbar {
-    position: static !important;
-    padding: 18px 14px 20px !important;
-  }
-
-  .navbarInner {
-    width: 100% !important;
-    flex-direction: column !important;
-    gap: 16px !important;
-  }
-
-  .navbarLogo img {
-    width: 135px !important;
-  }
-
-  .navbarLinks {
-    width: 100% !important;
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
-  }
-
-  .navbarLinks a {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-height: 42px !important;
-    padding: 10px 8px !important;
-    font-size: 13px !important;
-    border-radius: 999px !important;
-    background: rgba(255, 255, 255, 0.07) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    text-align: center !important;
-  }
-
-  .navbarLinks .navbarCta {
-    grid-column: span 2 !important;
-  }
-
-  .heroSection {
-    min-height: auto !important;
-    padding: 20px 14px 70px !important;
-  }
-
-  .heroCard {
-    margin-top: 0 !important;
-    padding: 34px 18px !important;
-    border-radius: 28px !important;
-  }
-
-  .heroBadge {
-    margin-bottom: 18px !important;
-    font-size: 12px !important;
-    padding: 9px 12px !important;
-  }
-
-  .heroTitle {
-    font-size: 40px !important;
-    line-height: 1.08 !important;
-    letter-spacing: -1px !important;
-  }
-
-  .heroText {
-    font-size: 16px !important;
-    line-height: 1.65 !important;
-  }
-}
-@media (max-width: 900px) {
-  .navbar {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    padding: 18px 14px 26px !important;
-  }
-
-  .navbarInner {
-    width: 100% !important;
-    max-width: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 18px !important;
-  }
-
-  .navbarLogo img {
-    width: 135px !important;
-  }
-
-  .navbarLinks {
-    width: 100% !important;
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
-  }
-
-  .navbarLinks a {
-    width: 100% !important;
-    min-height: 42px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 10px !important;
-    font-size: 13px !important;
-    border-radius: 999px !important;
-    background: rgba(255, 255, 255, 0.08) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  }
-
-  .navbarLinks a[href="/login"],
-  .navbarLinks a[href="/signup"] {
-    display: none !important;
-  }
-
-  .heroSection {
-    min-height: auto !important;
-    padding: 18px 14px 70px !important;
-  }
-
-  .heroCard {
-    margin-top: 0 !important;
-    padding: 34px 18px !important;
-    border-radius: 28px !important;
-  }
-
-  .heroBadge {
-    margin-top: 0 !important;
-    margin-bottom: 20px !important;
-  }
-
-  .heroTitle {
-    font-size: 38px !important;
-    line-height: 1.08 !important;
-    letter-spacing: -1px !important;
-  }
-
-  .heroText {
-    font-size: 16px !important;
-    line-height: 1.65 !important;
-  }
-}
-.brand img,
-.generateNav img,
-.historyNav img,
-.dashboardLogo img {
-  width: 160px;
-  height: auto;
-  object-fit: contain;
-  display: block;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-}
-/* FINAL PREMIUM POLISH */
-
-.heroCard {
-  background:
-    radial-gradient(circle at top right,
-      rgba(245,184,91,0.12),
-      transparent 38%),
-    radial-gradient(circle at bottom left,
-      rgba(16,185,129,0.10),
-      transparent 38%),
-    rgba(255,255,255,0.06);
-}
-
-.heroCard:hover {
-  transform: translateY(-4px);
-  transition: 0.35s ease;
-  box-shadow: 0 30px 90px rgba(0,0,0,0.35);
-}
-
-.featureCard,
-.pricingCard,
-.dashCard,
-.historyCard,
-.ctaCard {
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    border-color 0.3s ease;
-}
-
-.featureCard:hover,
-.pricingCard:hover,
-.dashCard:hover,
-.historyCard:hover,
-.ctaCard:hover {
-  transform: translateY(-6px);
-  border-color: rgba(245,184,91,0.25);
-  box-shadow: 0 25px 70px rgba(0,0,0,0.28);
-}
-
-.heroTitle,
-.sectionTitle,
-.ctaTitle,
-.pricingHero h1,
-.historyHero h1 {
-  text-shadow:
-    0 0 20px rgba(245,184,91,0.08),
-    0 0 40px rgba(16,185,129,0.05);
-}
-
-.primaryBtn,
-.primaryButton,
-.navCta {
-  position: relative;
-  overflow: hidden;
-}
-
-.primaryBtn::before,
-.primaryButton::before,
-.navCta::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      120deg,
-      transparent,
-      rgba(255,255,255,0.25),
-      transparent
-    );
-  transform: translateX(-120%);
-  transition: 0.7s ease;
-}
-
-.primaryBtn:hover::before,
-.primaryButton:hover::before,
-.navCta:hover::before {
-  transform: translateX(120%);
-}
-
-.heroStats span,
-.historyTags span {
-  backdrop-filter: blur(12px);
-}
-
-.footer {
-  position: relative;
-}
-
-.footer::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at center,
-      rgba(245,184,91,0.05),
-      transparent 60%);
-  pointer-events: none;
-}
-
-@media (max-width: 768px) {
-  .heroTitle {
-    font-size: 34px !important;
-  }
-
-  .sectionTitle,
-  .ctaTitle {
-    font-size: 32px !important;
-  }
-
-  .heroText,
-  .sectionText,
-  .ctaText {
-    font-size: 15px !important;
-  }
-
-  .heroCard,
-  .pricingCard,
-  .featureCard,
-  .ctaCard {
-    border-radius: 24px !important;
-  }
-
-  .primaryBtn,
-  .primaryButton,
-  .secondaryBtn {
-    width: 100%;
-    justify-content: center;
-  }
-}
-/* HOMEPAGE LAYOUT FIX */
-
-.heroSection {
-  min-height: auto !important;
-  padding: 150px 24px 90px !important;
-}
-
-.heroCard {
-  max-width: 1180px !important;
-  width: 100% !important;
-  padding: 72px 56px !important;
-}
-
-.heroTitle {
-  max-width: 980px !important;
-  font-size: clamp(48px, 5.8vw, 82px) !important;
-}
-
-.heroText {
-  max-width: 760px !important;
-}
-
-.heroPreview {
-  max-width: 760px;
-  margin: 38px auto 0;
-  padding: 24px;
-  border-radius: 26px;
-  background: rgba(255, 255, 255, 0.055);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  text-align: left;
-}
-
-.heroPreviewTop,
-.heroPreviewBottom {
-  display: grid;
-  gap: 8px;
-}
-
-.heroPreviewTop span,
-.heroPreviewBottom span {
-  color: var(--primary);
-  font-size: 12px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.7px;
-}
-
-.heroPreviewTop p,
-.heroPreviewBottom p {
-  margin: 0;
-  color: var(--text-main);
-  line-height: 1.6;
-  font-weight: 800;
-}
-
-.heroPreviewArrow {
-  text-align: center;
-  margin: 14px 0;
-  color: var(--secondary);
-  font-size: 24px;
-  font-weight: 900;
-}
-
-.heroPreviewTags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 18px;
-}
-
-.heroPreviewTags span {
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  color: #bfffe7;
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.featuresSection {
-  padding-top: 90px !important;
-}
-
-@media (max-width: 768px) {
-  .heroSection {
-    padding: 24px 14px 70px !important;
-  }
-
-  .heroCard {
-    padding: 34px 18px !important;
-  }
-
-  .heroTitle {
-    font-size: 38px !important;
+    max-width: 300px;
   }
 
   .heroPreview {
@@ -1828,5 +1454,112 @@ a {
 
   .heroPreviewTags {
     justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: min(100% - 28px, 1240px);
+  }
+
+  .sectionTitle,
+  .ctaTitle {
+    font-size: 32px;
+    letter-spacing: -1px;
+  }
+
+  .heroTitle {
+    font-size: 36px;
+  }
+
+  .heroText,
+  .sectionText,
+  .ctaText {
+    font-size: 15px;
+  }
+
+  .heroCard,
+  .pricingCard,
+  .featureCard,
+  .ctaCard {
+    border-radius: 24px;
+  }
+
+  .primaryBtn,
+  .primaryButton,
+  .secondaryBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .featureBottomStats,
+  .ctaStats {
+    grid-template-columns: 1fr;
+  }
+
+  .historyCardTop {
+    flex-direction: column;
+  }
+
+  .ctaCard {
+    padding: 48px 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .navbarLinks,
+  .navLinks {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .navbarLinks .navbarCta,
+  .navLinks .navCta {
+    grid-column: span 2;
+  }
+
+  .pricingPreview {
+    padding: 26px 18px;
+  }
+
+  .pricingCard {
+    padding: 28px 22px;
+  }
+
+  .pricingPrice,
+  .planPrice {
+    font-size: 46px;
+  }
+
+  .pricingCard h3,
+  .pricingPlan h3 {
+    font-size: 26px;
+  }
+
+  .footerLinks {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboardMenu {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 430px) {
+  .heroTitle {
+    font-size: 34px;
+  }
+
+  .heroCard {
+    margin-top: 0;
+  }
+
+  .navbarLinks,
+  .navLinks {
+    grid-template-columns: 1fr;
+  }
+
+  .navbarLinks .navbarCta,
+  .navLinks .navCta {
+    grid-column: span 1;
   }
 }
