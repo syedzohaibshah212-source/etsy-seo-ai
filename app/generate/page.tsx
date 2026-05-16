@@ -50,6 +50,7 @@ export default function GeneratePage() {
 
   const availableMethods = useMemo(() => {
     if (plan === "Pro" || plan === "Agency") return seoMethods
+
     return seoMethods.slice(0, 3)
   }, [plan])
 
@@ -109,7 +110,10 @@ export default function GeneratePage() {
     setError("")
 
     const timers = [
-      setTimeout(() => setLoadingStep("Finding Etsy keyword opportunities..."), 1200),
+      setTimeout(
+        () => setLoadingStep("Finding Etsy keyword opportunities..."),
+        1200
+      ),
       setTimeout(() => setLoadingStep("Generating SEO title..."), 2400),
       setTimeout(() => setLoadingStep("Writing description..."), 3600),
       setTimeout(() => setLoadingStep("Creating 13 Etsy tags..."), 4800),
@@ -128,6 +132,7 @@ export default function GeneratePage() {
       }
 
       const formData = new FormData()
+
       formData.append("image", imageFile)
       formData.append("competitorTitle", competitorTitle)
       formData.append("method", method)
@@ -220,23 +225,39 @@ ${result.scoreFeedback}
     if (!result) return
 
     const doc = new jsPDF()
+
     doc.setFontSize(20)
     doc.text("EtsySEO AI Listing Report", 20, 20)
 
     doc.setFontSize(12)
     doc.text(`SEO Score: ${result.seoScore}/100`, 20, 40)
-    doc.text(`Visibility Score: ${safeScore(result.visibilityScore)}/100`, 20, 50)
-    doc.text(`Competition Score: ${safeScore(result.competitionScore)}/100`, 20, 60)
-    doc.text(`Optimization Score: ${safeScore(result.optimizationScore)}/100`, 20, 70)
+    doc.text(
+      `Visibility Score: ${safeScore(result.visibilityScore)}/100`,
+      20,
+      50
+    )
+    doc.text(
+      `Competition Score: ${safeScore(result.competitionScore)}/100`,
+      20,
+      60
+    )
+    doc.text(
+      `Optimization Score: ${safeScore(result.optimizationScore)}/100`,
+      20,
+      70
+    )
 
     doc.text(`Title: ${result.title}`, 20, 88, { maxWidth: 170 })
     doc.text(`Category: ${result.category}`, 20, 112)
+
     doc.text(`Tags: ${safeArray(result.tags).join(", ")}`, 20, 126, {
       maxWidth: 170,
     })
+
     doc.text(`Keywords: ${safeArray(result.keywords).join(", ")}`, 20, 146, {
       maxWidth: 170,
     })
+
     doc.text(`Description: ${result.description}`, 20, 170, {
       maxWidth: 170,
     })
@@ -272,9 +293,11 @@ ${result.scoreFeedback}
 
         <div className="navLinks">
           <Link href="/">Home</Link>
+          <Link href="/audit">Audit</Link>
           <Link href="/pricing">Pricing</Link>
           <Link href="/history">History</Link>
           <Link href="/settings">Settings</Link>
+
           <Link href="/dashboard" className="navCta">
             Dashboard
           </Link>
@@ -399,21 +422,30 @@ ${result.scoreFeedback}
               <div className="resultItem large">
                 <div>
                   <span>Visibility Score</span>
-                  <p>{safeScore(result.visibilityScore)}/100 estimated search discoverability</p>
+                  <p>
+                    {safeScore(result.visibilityScore)}/100 estimated search
+                    discoverability
+                  </p>
                 </div>
               </div>
 
               <div className="resultItem large">
                 <div>
                   <span>Competition Score</span>
-                  <p>{safeScore(result.competitionScore)}/100 niche opportunity score</p>
+                  <p>
+                    {safeScore(result.competitionScore)}/100 niche opportunity
+                    score
+                  </p>
                 </div>
               </div>
 
               <div className="resultItem large">
                 <div>
                   <span>Optimization Score</span>
-                  <p>{safeScore(result.optimizationScore)}/100 Etsy-ready optimization quality</p>
+                  <p>
+                    {safeScore(result.optimizationScore)}/100 Etsy-ready
+                    optimization quality
+                  </p>
                 </div>
               </div>
 
@@ -439,7 +471,11 @@ ${result.scoreFeedback}
                 <div className="tagsTop">
                   <span>13 Etsy Tags</span>
 
-                  <button onClick={() => copyText(safeArray(result.tags).join(", "))}>
+                  <button
+                    onClick={() =>
+                      copyText(safeArray(result.tags).join(", "))
+                    }
+                  >
                     Copy Tags
                   </button>
                 </div>
@@ -471,9 +507,9 @@ ${result.scoreFeedback}
                       ? safeArray(result.keywords).map((keyword) => (
                           <span key={keyword}>{keyword}</span>
                         ))
-                      : safeArray(result.tags).slice(0, 6).map((tag) => (
-                          <span key={tag}>{tag}</span>
-                        ))}
+                      : safeArray(result.tags)
+                          .slice(0, 6)
+                          .map((tag) => <span key={tag}>{tag}</span>)}
                   </div>
                 </div>
               </div>
@@ -489,8 +525,12 @@ ${result.scoreFeedback}
                       ))
                     ) : (
                       <>
-                        <li>Use all 13 Etsy tags for maximum discoverability.</li>
-                        <li>Keep important keywords near the beginning of title.</li>
+                        <li>
+                          Use all 13 Etsy tags for maximum discoverability.
+                        </li>
+                        <li>
+                          Keep important keywords near the beginning of title.
+                        </li>
                         <li>Use long-tail buyer intent phrases.</li>
                         <li>Refresh seasonal keywords regularly.</li>
                       </>

@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js"
 import { buildEtsyPrompt } from "@/lib/buildEtsyPrompt"
 import { generateAIListing } from "@/lib/ai/generateListing"
 import { generateListingSchema } from "@/lib/validations/generateListing"
+import { calculateSeoScore } from "@/lib/seo/calculateSeoScore"
 
 type ListingData = {
   title: string
@@ -291,6 +292,25 @@ export async function POST(req: Request) {
     }
 
     const data = normalizeListingData(parsedData)
+
+    const seoAnalysis = calculateSeoScore({
+      title: data.title,
+      description: data.description,
+      tags: data.tags,
+      category: data.category,
+      keywords: data.keywords,
+    })
+
+    data.seoScore = seoAnalysis.seoScore
+    data.visibilityScore = seoAnalysis.visibilityScore
+    data.competitionScore = seoAnalysis.competitionScore
+    data.optimizationScore = seoAnalysis.optimizationScore
+    data.scoreBreakdown = seoAnalysis.scoreBreakdown
+    data.scoreFeedback = seoAnalysis.scoreFeedback
+
+    if (data.tips.length === 0) {
+      data.tips = seoAnalysis.tips
+    }
 
     const { data: savedListing, error: listingError } = await supabase
       .from("listings")

@@ -273,7 +273,9 @@ ${item.description}
         <div className="navLinks">
           <Link href="/dashboard">Dashboard</Link>
           <Link href="/generate">Generator</Link>
+          <Link href="/audit">Audit</Link>
           <Link href="/pricing">Pricing</Link>
+          <Link href="/history">History</Link>
           <Link href="/settings">Settings</Link>
         </div>
       </nav>
@@ -293,6 +295,10 @@ ${item.description}
         <div className="historyHeroActions">
           <Link href="/generate" className="primaryBtn">
             Generate New Listing
+          </Link>
+
+          <Link href="/audit" className="primaryBtn">
+            Audit Existing Listing
           </Link>
 
           <button onClick={exportCSV} className="historyExportBtn">
