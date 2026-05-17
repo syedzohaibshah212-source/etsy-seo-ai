@@ -1932,310 +1932,88 @@ a {
     padding: 26px 20px;
   }
 }
-
-/* =========================================
-   PREMIUM VIDEO STYLE ANIMATIONS
-   Added for EtsySEO AI homepage effects
-========================================= */
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.12), transparent 30%),
-    radial-gradient(circle at 80% 10%, rgba(245, 184, 91, 0.10), transparent 28%),
-    radial-gradient(circle at 50% 90%, rgba(20, 184, 166, 0.12), transparent 35%);
-  animation: bgMove 16s ease-in-out infinite alternate;
-}
-
-body::after {
-  content: "";
-  position: fixed;
-  width: 700px;
-  height: 700px;
-  border-radius: 999px;
-  top: -220px;
-  right: -180px;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(
-      circle,
-      rgba(245, 184, 91, 0.10),
-      rgba(16, 185, 129, 0.08),
-      transparent 70%
-    );
-  filter: blur(40px);
-  animation: orbFloat 12s ease-in-out infinite alternate;
-}
+/* PREMIUM GLASS HOVER EFFECTS */
 
 .glassCard,
-.heroCard,
-.pricingCard,
 .featureCard,
-.testimonialCard,
+.pricingCard,
 .ctaCard,
-.pricingPlan,
-.historyCard,
-.authCard,
-.dashboardSidebar,
-.dashboardContent,
+.heroCard,
 .dashCard,
 .dashPanel {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-}
-
-.glassCard::after,
-.heroCard::after,
-.pricingCard::after,
-.featureCard::after,
-.testimonialCard::after,
-.ctaCard::after,
-.pricingPlan::after {
-  content: "";
-  position: absolute;
-  inset: -200%;
-  background:
-    linear-gradient(
-      120deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.04) 40%,
-      rgba(255, 255, 255, 0.10) 50%,
-      rgba(255, 255, 255, 0.04) 60%,
-      transparent 100%
-    );
-  transform: rotate(12deg);
-  animation: glassShine 8s linear infinite;
-  pointer-events: none;
-  z-index: -1;
-}
-
-.featureCard,
-.pricingCard,
-.testimonialCard,
-.dashCard,
-.dashPanel,
-.historyCard {
   transition:
-    transform 0.45s cubic-bezier(.2, .8, .2, 1),
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
     border-color 0.35s ease,
-    box-shadow 0.35s ease;
+    background 0.35s ease;
+  will-change: transform;
 }
 
+.glassCard:hover,
 .featureCard:hover,
 .pricingCard:hover,
-.testimonialCard:hover,
+.ctaCard:hover,
+.heroCard:hover,
 .dashCard:hover,
-.dashPanel:hover,
-.historyCard:hover {
-  transform: translateY(-10px) scale(1.015);
-  border-color: rgba(245, 184, 91, 0.24);
+.dashPanel:hover {
+  transform: translateY(-8px) scale(1.015);
+  border-color: rgba(245, 184, 91, 0.34);
   box-shadow:
-    0 30px 90px rgba(0, 0, 0, 0.45),
-    0 0 30px rgba(245, 184, 91, 0.08);
+    0 28px 80px rgba(0, 0, 0, 0.38),
+    0 0 40px rgba(16, 185, 129, 0.12);
 }
 
-.navbar {
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-.heroCard {
-  animation: heroFloat 6s ease-in-out infinite alternate;
-}
-
-.heroTitle,
-.sectionTitle,
-.ctaTitle,
-.pricingHero h1,
-.historyHero h1 {
-  position: relative;
-}
-
-.heroTitle::after,
-.sectionTitle::after,
-.ctaTitle::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -18px;
-  width: 120px;
-  height: 28px;
-  transform: translateX(-50%);
-  background: radial-gradient(circle, rgba(245, 184, 91, 0.18), transparent 70%);
-  filter: blur(18px);
-  opacity: 0.8;
-}
-
-.primaryBtn,
-.primaryButton,
-.navCta,
-.authButton {
-  position: relative;
-  overflow: hidden;
-}
-
-.primaryBtn::after,
-.primaryButton::after,
-.navCta::after,
-.authButton::after {
+.featureCard::after,
+.pricingCard::after,
+.ctaCard::after,
+.heroCard::after {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(
-      120deg,
-      transparent,
-      rgba(255, 255, 255, 0.35),
-      transparent
-    );
-  transform: translateX(-130%);
-  transition: 0.8s ease;
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.12) 45%,
+    transparent 70%
+  );
+  transform: translateX(-140%);
+  transition: transform 0.7s ease;
   pointer-events: none;
 }
 
-.primaryBtn:hover::after,
-.primaryButton:hover::after,
-.navCta:hover::after,
-.authButton:hover::after {
-  transform: translateX(130%);
+.featureCard:hover::after,
+.pricingCard:hover::after,
+.ctaCard:hover::after,
+.heroCard:hover::after {
+  transform: translateX(140%);
 }
 
-.featuresSection,
-.testimonialsSection,
-.pricingPreview,
-.ctaSection,
-.footer {
-  animation: revealUp linear both;
-  animation-timeline: view();
-  animation-range: entry 0% cover 35%;
+.featureCard,
+.pricingCard,
+.ctaCard,
+.heroCard {
+  position: relative;
+  overflow: hidden;
 }
 
-.heroCard::before,
-.pricingFeatured::before,
-.featuredPlan::before {
-  animation: pulseGlow 4s ease-in-out infinite;
-}
-
-.heroPreview {
-  animation: previewFloat 5s ease-in-out infinite alternate;
-}
-
-@keyframes glassShine {
-  0% {
-    transform: translateX(-60%) rotate(12deg);
+@media (prefers-reduced-motion: reduce) {
+  .glassCard,
+  .featureCard,
+  .pricingCard,
+  .ctaCard,
+  .heroCard,
+  .dashCard,
+  .dashPanel {
+    transition: none;
   }
 
-  100% {
-    transform: translateX(60%) rotate(12deg);
-  }
-}
-
-@keyframes heroFloat {
-  from {
-    transform: translateY(0);
-  }
-
-  to {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes previewFloat {
-  from {
-    transform: translateY(0) rotate(0deg);
-  }
-
-  to {
-    transform: translateY(-8px) rotate(.4deg);
-  }
-}
-
-@keyframes orbFloat {
-  from {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-
-  to {
-    transform: translate3d(-40px, 40px, 0) scale(1.1);
-  }
-}
-
-@keyframes bgMove {
-  from {
-    transform: scale(1);
-  }
-
-  to {
-    transform: scale(1.08);
-  }
-}
-
-@keyframes pulseGlow {
-  0%,
-  100% {
-    opacity: 0.7;
-  }
-
-  50% {
-    opacity: 1;
-  }
-}
-
-@keyframes revealUp {
-  from {
-    opacity: 0;
-    transform: translateY(90px) scale(.96);
-    filter: blur(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
-}
-
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0d1420;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--primary), var(--secondary));
-  border-radius: 999px;
-}
-
-@media (max-width: 768px) {
-  body::after {
-    width: 420px;
-    height: 420px;
-  }
-
+  .glassCard:hover,
   .featureCard:hover,
   .pricingCard:hover,
-  .testimonialCard:hover,
+  .ctaCard:hover,
+  .heroCard:hover,
   .dashCard:hover,
-  .dashPanel:hover,
-  .historyCard:hover {
-    transform: translateY(-4px) scale(1.01);
-  }
-
-  .glassCard::after,
-  .heroCard::after,
-  .pricingCard::after,
-  .featureCard::after,
-  .testimonialCard::after,
-  .ctaCard::after,
-  .pricingPlan::after {
-    animation-duration: 14s;
+  .dashPanel:hover {
+    transform: none;
   }
 }
