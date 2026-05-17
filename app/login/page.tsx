@@ -12,7 +12,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
-  const [googleLoading, setGoogleLoading] = useState(false)
 
   async function handleLogin() {
     setError("")
@@ -40,29 +39,6 @@ export default function LoginPage() {
     router.refresh()
   }
 
-  async function handleGoogleLogin() {
-    setError("")
-    setGoogleLoading(true)
-
-    const redirectTo = `${window.location.origin}/dashboard`
-
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo,
-        queryParams: {
-          access_type: "offline",
-          prompt: "consent",
-        },
-      },
-    })
-
-    if (error) {
-      setGoogleLoading(false)
-      setError(error.message)
-    }
-  }
-
   return (
     <main className="authPage">
       <section className="authLeft">
@@ -85,24 +61,12 @@ export default function LoginPage() {
       <section className="authCard">
         <div className="authHeader">
           <h2>Login</h2>
-          <p>Continue with email or Google.</p>
+          <p>Enter your email and password to continue.</p>
         </div>
 
         <form className="authForm">
-          <button
-            type="button"
-            className="googleButton"
-            onClick={handleGoogleLogin}
-            disabled={googleLoading || loading}
-          >
-            {googleLoading ? "Opening Google..." : "Continue with Google"}
-          </button>
-
-          <div className="authDivider">
-            <span>or login with email</span>
-          </div>
-
           <label>Email Address</label>
+
           <input
             type="email"
             placeholder="you@example.com"
@@ -111,6 +75,7 @@ export default function LoginPage() {
           />
 
           <label>Password</label>
+
           <input
             type="password"
             placeholder="Enter your password"
@@ -124,7 +89,7 @@ export default function LoginPage() {
             type="button"
             className="authButton"
             onClick={handleLogin}
-            disabled={loading || googleLoading}
+            disabled={loading}
           >
             {loading ? "Logging in..." : "Continue"}
           </button>
