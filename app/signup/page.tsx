@@ -13,7 +13,6 @@ export default function SignupPage() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
-  const [googleLoading, setGoogleLoading] = useState(false)
 
   async function handleSignup() {
     setError("")
@@ -56,29 +55,6 @@ export default function SignupPage() {
     router.refresh()
   }
 
-  async function handleGoogleSignup() {
-    setError("")
-    setGoogleLoading(true)
-
-    const redirectTo = `${window.location.origin}/dashboard`
-
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo,
-        queryParams: {
-          access_type: "offline",
-          prompt: "consent",
-        },
-      },
-    })
-
-    if (error) {
-      setGoogleLoading(false)
-      setError(error.message)
-    }
-  }
-
   return (
     <main className="authPage">
       <section className="authLeft">
@@ -102,25 +78,10 @@ export default function SignupPage() {
         <div className="authHeader">
           <h2>Create Account</h2>
 
-          <p>Start free with email or Google.</p>
+          <p>Create your account to continue.</p>
         </div>
 
         <form className="authForm">
-          <button
-            type="button"
-            className="googleButton"
-            onClick={handleGoogleSignup}
-            disabled={googleLoading || loading}
-          >
-            {googleLoading
-              ? "Opening Google..."
-              : "Continue with Google"}
-          </button>
-
-          <div className="authDivider">
-            <span>or create account with email</span>
-          </div>
-
           <label>Full Name</label>
 
           <input
@@ -154,7 +115,7 @@ export default function SignupPage() {
             type="button"
             className="authButton"
             onClick={handleSignup}
-            disabled={loading || googleLoading}
+            disabled={loading}
           >
             {loading ? "Creating..." : "Create Account"}
           </button>
