@@ -1801,3 +1801,70 @@ a {
   font-weight: 800;
   letter-spacing: 0.08em;
 }
+/* HOMEPAGE PRICING LAYOUT FIX */
+
+.pricingPreview {
+  margin: 90px auto 110px !important;
+  padding: 54px 38px !important;
+  overflow: visible !important;
+}
+
+.pricingPreview .sectionTitle {
+  font-size: clamp(36px, 4.6vw, 64px) !important;
+  line-height: 1.05 !important;
+}
+
+.pricingGrid {
+  align-items: stretch !important;
+  gap: 24px !important;
+}
+
+.pricingCard {
+  min-height: auto !important;
+  padding: 34px 28px !important;
+}
+
+.pricingCard h3 {
+  font-size: 34px !important;
+  margin-bottom: 18px !important;
+}
+
+.pricingPrice {
+  font-size: 54px !important;
+  margin-bottom: 18px !important;
+}
+
+.pricingCard p {
+  font-size: 15px !important;
+  line-height: 1.65 !important;
+  margin-bottom: 22px !important;
+}
+
+.pricingCard ul {
+  gap: 10px !important;
+  margin-bottom: 28px !important;
+}
+
+.pricingCard li {
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+}
+
+.pricingCard:last-child::before {
+  top: 14px !important;
+  right: 18px !important;
+}
+
+@media (max-width: 980px) {
+  .pricingGrid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .pricingPreview {
+    padding: 34px 18px !important;
+  }
+
+  .pricingCard {
+    padding: 30px 22px !important;
+  }
+}
