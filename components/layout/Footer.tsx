@@ -10,8 +10,8 @@ export default function Footer() {
             <img src="/logo.png" alt="EtsySEO AI" />
 
             <p>
-              AI-powered Etsy SEO listing generation platform for modern Etsy
-              sellers.
+              AI-powered Etsy SEO listing generation platform built for modern
+              Etsy sellers, digital creators and growing online shops.
             </p>
           </div>
 
@@ -20,6 +20,7 @@ export default function Footer() {
               <h4>Product</h4>
 
               <Link href="/generate">Generator</Link>
+              <Link href="/audit">Listing Audit</Link>
               <Link href="/pricing">Pricing</Link>
               <Link href="/history">History</Link>
             </div>
@@ -35,9 +36,10 @@ export default function Footer() {
             <div>
               <h4>Company</h4>
 
-              <a href="#">Privacy Policy</a>
-              <a href="#">Terms</a>
-              <a href="#">Support</a>
+              <Link href="/privacy">Privacy Policy</Link>
+              <Link href="/terms">Terms of Service</Link>
+              <Link href="/refund-policy">Refund Policy</Link>
+              <Link href="/support">Support</Link>
             </div>
           </div>
         </div>

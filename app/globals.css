@@ -1775,96 +1775,161 @@ a {
     justify-content: flex-start;
   }
 }
+
+/* =========================
+   FINAL CLEAN FIXES
+========================= */
+
+.dashboardSubtitle {
+  margin: 10px 0 0;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.dashboardHeaderActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.dashboardQuickActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.dashboardStats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Home pricing preview clean layout */
+
+.pricingPreview {
+  overflow: visible;
+}
+
+.pricingPreview .sectionHeader {
+  margin-bottom: 44px;
+}
+
+.pricingGrid {
+  align-items: stretch;
+}
+
+.pricingCard {
+  justify-content: flex-start;
+  min-height: auto;
+}
+
+.pricingCard h3 {
+  padding-right: 96px;
+}
+
+.pricingCard p {
+  margin-bottom: 22px;
+}
+
+.pricingCard ul {
+  gap: 11px;
+  margin-bottom: 28px;
+}
+
+.pricingCard li {
+  line-height: 1.45;
+}
+
+.pricingButton {
+  margin-top: auto;
+}
+
+.pricingFeatured {
+  transform: translateY(-10px);
+}
+
 .pricingCard:last-child {
   position: relative;
-  border: 1px solid rgba(255, 215, 0, 0.22);
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 215, 0, 0.04),
-      rgba(255, 215, 0, 0.01)
-    ),
-    rgba(10, 10, 10, 0.92);
+  border: 1px solid rgba(255, 215, 0, 0.16);
 }
 
 .pricingCard:last-child::before {
   content: "BEST FOR TEAMS";
   position: absolute;
-  top: -12px;
-  right: 20px;
-  padding: 7px 14px;
+  top: 18px;
+  right: 18px;
+  padding: 6px 12px;
   border-radius: 999px;
-  background: rgba(255, 215, 0, 0.12);
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.22);
   color: #ffd95e;
-  font-size: 11px;
-  font-weight: 800;
+  font-size: 10px;
+  font-weight: 900;
   letter-spacing: 0.08em;
 }
-/* HOMEPAGE PRICING LAYOUT FIX */
 
-.pricingPreview {
-  margin: 90px auto 110px !important;
-  padding: 54px 38px !important;
-  overflow: visible !important;
+.legalPage {
+  width: min(900px, calc(100% - 32px));
+  margin: 0 auto 100px;
+  padding: 36px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  line-height: 1.8;
 }
 
-.pricingPreview .sectionTitle {
-  font-size: clamp(36px, 4.6vw, 64px) !important;
-  line-height: 1.05 !important;
+.legalPage h2 {
+  color: var(--primary);
+  margin: 28px 0 10px;
 }
 
-.pricingGrid {
-  align-items: stretch !important;
-  gap: 24px !important;
+.legalPage h2:first-child {
+  margin-top: 0;
 }
 
-.pricingCard {
-  min-height: auto !important;
-  padding: 34px 28px !important;
+.legalPage p {
+  margin: 0 0 16px;
 }
 
-.pricingCard h3 {
-  font-size: 34px !important;
-  margin-bottom: 18px !important;
+.legalPage strong {
+  color: white;
 }
 
-.pricingPrice {
-  font-size: 54px !important;
-  margin-bottom: 18px !important;
-}
-
-.pricingCard p {
-  font-size: 15px !important;
-  line-height: 1.65 !important;
-  margin-bottom: 22px !important;
-}
-
-.pricingCard ul {
-  gap: 10px !important;
-  margin-bottom: 28px !important;
-}
-
-.pricingCard li {
-  font-size: 14px !important;
-  line-height: 1.45 !important;
-}
-
-.pricingCard:last-child::before {
-  top: 14px !important;
-  right: 18px !important;
+.legalPage ul {
+  margin: 0;
+  padding-left: 20px;
 }
 
 @media (max-width: 980px) {
+  .dashboardStats {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboardHeaderActions {
+    justify-content: flex-start;
+  }
+
   .pricingGrid {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr;
   }
 
-  .pricingPreview {
-    padding: 34px 18px !important;
+  .pricingFeatured {
+    transform: none;
   }
 
-  .pricingCard {
-    padding: 30px 22px !important;
+  .pricingCard h3 {
+    padding-right: 0;
   }
 }
+
+@media (max-width: 640px) {
+  .pricingPreview {
+    padding: 28px 18px;
+  }
+
+  .legalPage {
+    padding: 26px 20px;
+  }
+}
+
