@@ -2,36 +2,28 @@ import Card from "@/components/ui/Card"
 
 const features = [
   {
-    title: "AI Vision Etsy Analysis",
-    text: "Upload your PNG or product design and EtsySEO AI analyzes artwork, style, audience, colors and buyer intent automatically.",
+    title: "AI Etsy SEO Titles",
+    text: "Generate keyword-focused Etsy titles designed to improve search visibility and buyer clicks.",
   },
   {
-    title: "13 Etsy SEO Tags",
-    text: "Generate optimized Etsy tags with long-tail keywords, niche targeting and buyer-search relevance.",
-  },
-  {
-    title: "SEO Score Engine",
-    text: "Get real Etsy listing scores including visibility score, competition score and optimization quality analysis.",
-  },
-  {
-    title: "Keyword Opportunities",
-    text: "Discover additional Etsy keyword opportunities your competitors are missing.",
+    title: "13 Optimized Tags",
+    text: "Get a complete set of Etsy tags with long-tail, niche and buyer-intent keywords.",
   },
   {
     title: "AI Listing Audit",
-    text: "Paste an existing Etsy listing and instantly discover weaknesses, missing keywords and SEO improvements.",
+    text: "Analyze existing Etsy listings, detect SEO weaknesses and generate optimized improvements instantly.",
   },
   {
-    title: "Conversion Optimization",
-    text: "Generate descriptions designed to improve clicks, clarity and buyer trust without keyword stuffing.",
+    title: "Competitor Title Input",
+    text: "Paste a competitor title and let EtsySEO AI create a stronger optimized version.",
   },
   {
-    title: "Competitor Gap Analysis",
-    text: "Analyze competitor title structures and create stronger optimized listing angles for your shop.",
+    title: "Image-Based Generation",
+    text: "Upload your product image and generate listing content based on your product style.",
   },
   {
-    title: "Premium Etsy Titles",
-    text: "Create Etsy-ready titles focused on ranking, click-through rate and long-tail buyer intent.",
+    title: "Premium Descriptions",
+    text: "Create clean, conversion-focused descriptions with natural SEO keyword placement.",
   },
 ]
 
@@ -39,48 +31,25 @@ export default function FeaturesSection() {
   return (
     <section className="featuresSection">
       <div className="sectionHeader">
-        <span className="sectionBadge">
-          Built specifically for Etsy sellers
-        </span>
+        <span className="sectionBadge">Why EtsySEO AI?</span>
 
         <h2 className="sectionTitle">
-          More Than A Basic AI Writer
+          Everything You Need To Create Better Etsy Listings
         </h2>
 
         <p className="sectionText">
-          EtsySEO AI combines Etsy SEO optimization, keyword analysis, AI vision,
-          listing audits and conversion-focused copywriting into one premium Etsy
-          seller toolkit.
+          Built for Etsy sellers who want faster listing creation, stronger SEO
+          and premium product copy without wasting hours on keyword research.
         </p>
       </div>
 
       <div className="featuresGrid">
         {features.map((feature) => (
           <Card key={feature.title} className="featureCard">
-            <div className="featureIconGlow"></div>
-
             <h3>{feature.title}</h3>
-
             <p>{feature.text}</p>
           </Card>
         ))}
-      </div>
-
-      <div className="featureBottomStats">
-        <div className="featureStatCard">
-          <strong>12K+</strong>
-          <span>Listings Generated</span>
-        </div>
-
-        <div className="featureStatCard">
-          <strong>3.1M+</strong>
-          <span>SEO Keywords Processed</span>
-        </div>
-
-        <div className="featureStatCard">
-          <strong>4.9/5</strong>
-          <span>Seller Satisfaction</span>
-        </div>
       </div>
     </section>
   )

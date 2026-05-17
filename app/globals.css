@@ -1775,3 +1775,29 @@ a {
     justify-content: flex-start;
   }
 }
+.pricingCard:last-child {
+  position: relative;
+  border: 1px solid rgba(255, 215, 0, 0.22);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 215, 0, 0.04),
+      rgba(255, 215, 0, 0.01)
+    ),
+    rgba(10, 10, 10, 0.92);
+}
+
+.pricingCard:last-child::before {
+  content: "BEST FOR TEAMS";
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255, 215, 0, 0.12);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  color: #ffd95e;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
