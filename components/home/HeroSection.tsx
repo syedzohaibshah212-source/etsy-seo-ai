@@ -1,5 +1,6 @@
 import Button from "@/components/ui/Button"
 import Card from "@/components/ui/Card"
+import AnimatedStat from "@/components/home/AnimatedStat"
 
 export default function HeroSection() {
   return (
@@ -31,10 +32,30 @@ export default function HeroSection() {
           </a>
         </div>
 
-        <div className="heroStats">
-          <span>SEO Titles</span>
-          <span>13 Etsy Tags</span>
-          <span>AI Listing Audit</span>
+        <div className="heroStats premiumStats">
+          <div>
+            <strong>
+              <AnimatedStat value={25000} suffix="+" />
+            </strong>
+
+            <span>SEO Listings Generated</span>
+          </div>
+
+          <div>
+            <strong>
+              <AnimatedStat value={13} />
+            </strong>
+
+            <span>Optimized Etsy Tags</span>
+          </div>
+
+          <div>
+            <strong>
+              <AnimatedStat value={92} suffix="%" />
+            </strong>
+
+            <span>Average SEO Score</span>
+          </div>
         </div>
 
         <div className="floatingDashboardMockup">
