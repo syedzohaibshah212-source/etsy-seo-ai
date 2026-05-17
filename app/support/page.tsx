@@ -33,7 +33,7 @@ export default function SupportPage() {
         <p>
           Email us at:
           <br />
-          <strong>support@etsyseoai.com</strong>
+          <strong>zohaibhussainshah28@gmail.com</strong>
         </p>
 
         <h2>What To Include</h2>
