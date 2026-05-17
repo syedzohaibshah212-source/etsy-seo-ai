@@ -2206,3 +2206,58 @@ a {
     transform: none;
   }
 }
+/* REMOVE OVERDONE PREMIUM EFFECTS */
+
+.heroTitle {
+  background: none !important;
+  background-size: auto !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: var(--text-main) !important;
+  animation: none !important;
+}
+
+.navbar,
+.pricingNav,
+.historyNav,
+.generateNav,
+.auditNav {
+  width: min(1240px, calc(100% - 32px)) !important;
+  margin: 0 auto !important;
+  padding: 22px 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.featureCard:hover,
+.pricingCard:hover,
+.heroCard:hover,
+.ctaCard:hover,
+.dashCard:hover,
+.dashPanel:hover,
+.historyCard:hover,
+.auditCard:hover {
+  transform: none !important;
+  box-shadow: inherit !important;
+  border-color: var(--border) !important;
+}
+
+.featureCard,
+.pricingCard,
+.heroCard,
+.ctaCard,
+.dashCard,
+.dashPanel,
+.historyCard,
+.auditCard {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.primaryBtn::after,
+.authButton::after,
+.pricingButton::after,
+.navCta::after {
+  display: none !important;
+}
