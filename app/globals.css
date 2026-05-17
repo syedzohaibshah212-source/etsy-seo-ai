@@ -1742,3 +1742,36 @@ a {
   height: 1px;
   background: var(--border);
 }
+.dashboardSubtitle {
+  margin: 10px 0 0;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.dashboardHeaderActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.dashboardQuickActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.dashboardStats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 980px) {
+  .dashboardStats {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboardHeaderActions {
+    justify-content: flex-start;
+  }
+}
