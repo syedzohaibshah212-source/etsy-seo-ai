@@ -100,6 +100,12 @@ function normalizeListingData(data: Record<string, unknown>): ListingData {
   }
 }
 
+function getDefaultCredits(plan: string) {
+  if (plan === "Agency") return 2000
+  if (plan === "Pro") return 500
+  return 5
+}
+
 async function fileToDataUrl(file: File) {
   const arrayBuffer = await file.arrayBuffer()
   const base64 = Buffer.from(arrayBuffer).toString("base64")
@@ -154,9 +160,16 @@ export async function POST(req: Request) {
       .eq("id", user.id)
       .maybeSingle<ProfileData>()
 
-    let currentCredits = profile?.credits ?? 5
+    let currentPlan = profile?.plan || "Free"
+    let currentCredits =
+      typeof profile?.credits === "number"
+        ? profile.credits
+        : getDefaultCredits(currentPlan)
 
     if (!profile) {
+      currentPlan = "Free"
+      currentCredits = 5
+
       await supabase.from("profiles").insert({
         id: user.id,
         email: user.email || "",
@@ -164,11 +177,9 @@ export async function POST(req: Request) {
           typeof user.user_metadata?.full_name === "string"
             ? user.user_metadata.full_name
             : "EtsySEO User",
-        plan: "Free",
-        credits: 5,
+        plan: currentPlan,
+        credits: currentCredits,
       })
-
-      currentCredits = 5
     }
 
     if (currentCredits <= 0) {
@@ -253,8 +264,6 @@ export async function POST(req: Request) {
     const imageDataUrl = await fileToDataUrl(image)
 
     const aiResponse = await generateAIListing(prompt, imageDataUrl)
-
-    console.log("RAW AI RESPONSE:", aiResponse)
 
     if (
       !aiResponse ||
@@ -344,7 +353,7 @@ export async function POST(req: Request) {
       )
     }
 
-    const remainingCredits = currentCredits - 1
+    const remainingCredits = Math.max(currentCredits - 1, 0)
 
     const { error: creditError } = await supabase
       .from("profiles")
@@ -360,6 +369,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       success: true,
       mode: "ai-vision-generated",
+      plan: currentPlan,
       remainingCredits,
       listingId: savedListing?.id,
       data,
