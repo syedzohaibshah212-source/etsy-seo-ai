@@ -2020,3 +2020,50 @@ a {
     width: min(360px, 100%);
   }
 }
+/* MOCKUP INFO CONTENT */
+
+.mockupInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+}
+
+.mockupInfo h4 {
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.mockupInfo p {
+  max-width: 520px;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.mockupBars {
+  display: grid;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.mockupBars span {
+  display: block;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.14);
+}
+
+.mockupBars span:nth-child(1) {
+  width: 100%;
+}
+
+.mockupBars span:nth-child(2) {
+  width: 78%;
+}
+
+.mockupBars span:nth-child(3) {
+  width: 86%;
+}

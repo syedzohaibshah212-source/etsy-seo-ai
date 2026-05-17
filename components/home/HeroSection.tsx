@@ -19,7 +19,10 @@ export default function HeroSection() {
 
         <div className="aiTypingLine">
           <span>AI is optimizing:</span>
-          <strong> Etsy title • 13 tags • SEO description • audit score</strong>
+          <strong>
+            {" "}
+            Etsy title • 13 tags • SEO description • audit score
+          </strong>
         </div>
 
         <div className="heroActions">
@@ -37,6 +40,7 @@ export default function HeroSection() {
             <strong>
               <AnimatedStat value={25000} suffix="+" />
             </strong>
+
             <span>Listings Generated</span>
           </div>
 
@@ -44,6 +48,7 @@ export default function HeroSection() {
             <strong>
               <AnimatedStat value={13} />
             </strong>
+
             <span>Etsy Tags</span>
           </div>
 
@@ -51,6 +56,7 @@ export default function HeroSection() {
             <strong>
               <AnimatedStat value={92} suffix="%" />
             </strong>
+
             <span>SEO Score</span>
           </div>
         </div>
@@ -65,13 +71,25 @@ export default function HeroSection() {
           <div className="mockupContent">
             <div className="mockupScore">
               <strong>92</strong>
+
               <span>SEO Score</span>
             </div>
 
-            <div className="mockupLines">
-              <span></span>
-              <span></span>
-              <span></span>
+            <div className="mockupInfo">
+              <h4>
+                Floral PNG Bundle for Etsy Sellers
+              </h4>
+
+              <p>
+                AI-optimized Etsy title with high buyer intent keywords,
+                stronger visibility and better click-through potential.
+              </p>
+
+              <div className="mockupBars">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
             </div>
           </div>
 
