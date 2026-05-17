@@ -33,28 +33,25 @@ export default function HeroSection() {
         </div>
 
         <div className="heroStats premiumStats">
-          <div>
+          <div className="premiumStatItem">
             <strong>
               <AnimatedStat value={25000} suffix="+" />
             </strong>
-
-            <span>SEO Listings Generated</span>
+            <span>Listings Generated</span>
           </div>
 
-          <div>
+          <div className="premiumStatItem">
             <strong>
               <AnimatedStat value={13} />
             </strong>
-
-            <span>Optimized Etsy Tags</span>
+            <span>Etsy Tags</span>
           </div>
 
-          <div>
+          <div className="premiumStatItem">
             <strong>
               <AnimatedStat value={92} suffix="%" />
             </strong>
-
-            <span>Average SEO Score</span>
+            <span>SEO Score</span>
           </div>
         </div>
 
