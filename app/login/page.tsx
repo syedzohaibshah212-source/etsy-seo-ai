@@ -12,11 +12,12 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [googleLoading, setGoogleLoading] = useState(false)
 
   async function handleLogin() {
     setError("")
 
-    if (!email || !password) {
+    if (!email.trim() || !password.trim()) {
       setError("Please enter your email and password.")
       return
     }
@@ -24,7 +25,7 @@ export default function LoginPage() {
     setLoading(true)
 
     const { error } = await supabase.auth.signInWithPassword({
-      email,
+      email: email.trim(),
       password,
     })
 
@@ -36,19 +37,28 @@ export default function LoginPage() {
     }
 
     router.push("/dashboard")
+    router.refresh()
   }
 
   async function handleGoogleLogin() {
     setError("")
+    setGoogleLoading(true)
+
+    const redirectTo = `${window.location.origin}/dashboard`
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/dashboard`,
+        redirectTo,
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent",
+        },
       },
     })
 
     if (error) {
+      setGoogleLoading(false)
       setError(error.message)
     }
   }
@@ -66,8 +76,8 @@ export default function LoginPage() {
           <h1>Welcome back to EtsySEO AI</h1>
 
           <p>
-            Login to generate Etsy SEO titles, tags, descriptions and optimized
-            product listings faster.
+            Login to generate Etsy SEO titles, tags, descriptions, audits and
+            optimized product listings faster.
           </p>
         </div>
       </section>
@@ -75,10 +85,23 @@ export default function LoginPage() {
       <section className="authCard">
         <div className="authHeader">
           <h2>Login</h2>
-          <p>Enter your details to continue.</p>
+          <p>Continue with email or Google.</p>
         </div>
 
         <form className="authForm">
+          <button
+            type="button"
+            className="googleButton"
+            onClick={handleGoogleLogin}
+            disabled={googleLoading || loading}
+          >
+            {googleLoading ? "Opening Google..." : "Continue with Google"}
+          </button>
+
+          <div className="authDivider">
+            <span>or login with email</span>
+          </div>
+
           <label>Email Address</label>
           <input
             type="email"
@@ -101,27 +124,15 @@ export default function LoginPage() {
             type="button"
             className="authButton"
             onClick={handleLogin}
-            disabled={loading}
+            disabled={loading || googleLoading}
           >
             {loading ? "Logging in..." : "Continue"}
-          </button>
-
-          <button
-            type="button"
-            className="googleButton"
-            onClick={handleGoogleLogin}
-          >
-            Continue with Google
           </button>
         </form>
 
         <p className="authSwitch">
           Don&apos;t have an account? <Link href="/signup">Create account</Link>
         </p>
-
-        <Link href="/generate" className="skipLink">
-          Continue without login
-        </Link>
       </section>
     </main>
   )

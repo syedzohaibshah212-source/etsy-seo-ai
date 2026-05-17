@@ -13,17 +13,34 @@ export default function SignupPage() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [googleLoading, setGoogleLoading] = useState(false)
 
   async function handleSignup() {
     setError("")
+
+    if (!fullName.trim()) {
+      setError("Please enter your full name.")
+      return
+    }
+
+    if (!email.trim() || !password.trim()) {
+      setError("Please complete all fields.")
+      return
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.")
+      return
+    }
+
     setLoading(true)
 
     const { error } = await supabase.auth.signUp({
-      email,
+      email: email.trim(),
       password,
       options: {
         data: {
-          full_name: fullName,
+          full_name: fullName.trim(),
         },
       },
     })
@@ -36,6 +53,30 @@ export default function SignupPage() {
     }
 
     router.push("/dashboard")
+    router.refresh()
+  }
+
+  async function handleGoogleSignup() {
+    setError("")
+    setGoogleLoading(true)
+
+    const redirectTo = `${window.location.origin}/dashboard`
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo,
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent",
+        },
+      },
+    })
+
+    if (error) {
+      setGoogleLoading(false)
+      setError(error.message)
+    }
   }
 
   return (
@@ -51,8 +92,8 @@ export default function SignupPage() {
           <h1>Create your EtsySEO AI account</h1>
 
           <p>
-            Start generating premium Etsy SEO listings, titles, tags, and
-            descriptions using AI.
+            Generate premium Etsy SEO titles, descriptions, tags, audits and
+            optimized product listings using AI.
           </p>
         </div>
       </section>
@@ -60,11 +101,28 @@ export default function SignupPage() {
       <section className="authCard">
         <div className="authHeader">
           <h2>Create Account</h2>
-          <p>Start your free account.</p>
+
+          <p>Start free with email or Google.</p>
         </div>
 
         <form className="authForm">
+          <button
+            type="button"
+            className="googleButton"
+            onClick={handleGoogleSignup}
+            disabled={googleLoading || loading}
+          >
+            {googleLoading
+              ? "Opening Google..."
+              : "Continue with Google"}
+          </button>
+
+          <div className="authDivider">
+            <span>or create account with email</span>
+          </div>
+
           <label>Full Name</label>
+
           <input
             type="text"
             placeholder="Your full name"
@@ -73,6 +131,7 @@ export default function SignupPage() {
           />
 
           <label>Email Address</label>
+
           <input
             type="email"
             placeholder="you@example.com"
@@ -81,6 +140,7 @@ export default function SignupPage() {
           />
 
           <label>Password</label>
+
           <input
             type="password"
             placeholder="Create password"
@@ -94,6 +154,7 @@ export default function SignupPage() {
             type="button"
             className="authButton"
             onClick={handleSignup}
+            disabled={loading || googleLoading}
           >
             {loading ? "Creating..." : "Create Account"}
           </button>
