@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useState } from "react"
 
-type PaidPlan = "starter" | "pro" | "agency"
+type PaidPlan = "pro" | "agency"
 
 const plans = [
   {
@@ -21,23 +21,6 @@ const plans = [
     button: "Start Free",
     href: "/signup",
     type: "free",
-  },
-  {
-    name: "Starter",
-    price: "$9",
-    label: "For new sellers",
-    description: "Best for small Etsy shops getting started.",
-    features: [
-      "100 AI generations/month",
-      "SEO title generator",
-      "13 optimized Etsy tags",
-      "Listing audit tool",
-      "Keyword opportunities",
-      "Saved history",
-    ],
-    button: "Start Starter",
-    plan: "starter",
-    type: "paid",
   },
   {
     name: "Pro",
@@ -141,7 +124,7 @@ export default function PricingPage() {
         </p>
       </section>
 
-      <section className="pricingFullGrid pricingFourGrid">
+      <section className="pricingFullGrid">
         {plans.map((plan) => (
           <div
             key={plan.name}
