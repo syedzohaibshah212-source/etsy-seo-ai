@@ -2017,3 +2017,192 @@ a {
     transform: none;
   }
 }
+/* PREMIUM APPLE AI SAAS EFFECTS */
+
+.premiumAurora {
+  position: fixed;
+  width: 520px;
+  height: 520px;
+  border-radius: 999px;
+  filter: blur(90px);
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: -1;
+  animation: auroraFloat 16s ease-in-out infinite;
+}
+
+.auroraOne {
+  top: -120px;
+  left: -120px;
+  background:
+    radial-gradient(
+      circle,
+      rgba(16,185,129,0.42),
+      transparent 70%
+    );
+}
+
+.auroraTwo {
+  bottom: -160px;
+  right: -100px;
+  background:
+    radial-gradient(
+      circle,
+      rgba(245,184,91,0.28),
+      transparent 70%
+    );
+  animation-delay: 6s;
+}
+
+@keyframes auroraFloat {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate(40px, -20px) scale(1.08);
+  }
+
+  50% {
+    transform: translate(-20px, 30px) scale(0.96);
+  }
+
+  75% {
+    transform: translate(30px, 10px) scale(1.05);
+  }
+
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+.premiumNoise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  z-index: -1;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='white' fill-opacity='0.12'%3E%3Ccircle cx='12' cy='18' r='1'/%3E%3Ccircle cx='42' cy='68' r='1'/%3E%3Ccircle cx='88' cy='32' r='1'/%3E%3Ccircle cx='110' cy='92' r='1'/%3E%3Ccircle cx='70' cy='118' r='1'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.heroTitle {
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f5b85b 34%,
+      #10b981 68%,
+      #ffffff 100%
+    );
+  background-size: 240% 240%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 7s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.navbar,
+.pricingNav,
+.historyNav,
+.generateNav,
+.auditNav {
+  backdrop-filter: blur(18px);
+  background: rgba(10, 15, 25, 0.52);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.24);
+  border-radius: 999px;
+}
+
+.primaryBtn,
+.authButton,
+.pricingButton,
+.navCta {
+  position: relative;
+  overflow: hidden;
+}
+
+.primaryBtn::after,
+.authButton::after,
+.pricingButton::after,
+.navCta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      120deg,
+      transparent 20%,
+      rgba(255,255,255,0.24) 45%,
+      transparent 70%
+    );
+  transform: translateX(-140%);
+  transition: transform 0.7s ease;
+}
+
+.primaryBtn:hover::after,
+.authButton:hover::after,
+.pricingButton:hover::after,
+.navCta:hover::after {
+  transform: translateX(140%);
+}
+
+.featureCard,
+.pricingCard,
+.heroCard,
+.ctaCard,
+.dashCard,
+.dashPanel,
+.historyCard,
+.auditCard {
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.featureCard:hover,
+.pricingCard:hover,
+.heroCard:hover,
+.ctaCard:hover,
+.dashCard:hover,
+.dashPanel:hover,
+.historyCard:hover,
+.auditCard:hover {
+  transform: translateY(-8px);
+  border-color: rgba(245,184,91,0.24);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.34),
+    0 0 40px rgba(16,185,129,0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premiumAurora,
+  .heroTitle {
+    animation: none;
+  }
+
+  .featureCard:hover,
+  .pricingCard:hover,
+  .heroCard:hover,
+  .ctaCard:hover,
+  .dashCard:hover,
+  .dashPanel:hover,
+  .historyCard:hover,
+  .auditCard:hover {
+    transform: none;
+  }
+}
