@@ -11,37 +11,40 @@ const plans = [
       "Basic Etsy SEO scores",
       "13 AI tags",
       "Listing audit access",
-      "Keyword suggestions",
+      "Saved history",
     ],
+    button: "Start Free",
   },
   {
     name: "Pro",
     price: "$19",
-    text: "Best for serious Etsy sellers growing traffic and sales.",
+    text: "Best for active Etsy sellers growing traffic and sales.",
     features: [
-      "Unlimited generations",
+      "500 AI generations/month",
       "Advanced AI SEO engine",
       "All 12 SEO methods",
-      "Competitor gap analysis",
-      "Advanced keyword opportunities",
+      "Competitor title analysis",
+      "CSV export",
       "Priority AI quality",
       "Full listing audit system",
     ],
+    button: "Upgrade To Pro",
     featured: true,
   },
   {
-    name: "Business",
+    name: "Agency",
     price: "$49",
-    text: "Built for agencies, large Etsy shops and scaling teams.",
+    text: "Built for large Etsy shops, agencies and high-volume sellers.",
     features: [
-      "Bulk listing generation",
+      "2,000 AI generations/month",
+      "Bulk listing workflow",
       "CSV export system",
-      "Team-ready workflow",
-      "Future analytics tools",
+      "Multiple shop workflow",
       "Priority support",
-      "High-volume optimization",
-      "Advanced shop management",
+      "Advanced analytics soon",
+      "Team-ready structure",
     ],
+    button: "Start Agency",
   },
 ]
 
@@ -95,9 +98,7 @@ export default function PricingPreview() {
 
             <a href="/pricing">
               <Button className="pricingButton">
-                {plan.featured
-                  ? "Upgrade To Pro"
-                  : "View Plan"}
+                {plan.button}
               </Button>
             </a>
           </Card>
