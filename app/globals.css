@@ -2329,3 +2329,80 @@ body {
     max-width: 100%;
   }
 }
+/* FINAL MOBILE POLISH */
+
+@media (max-width: 640px) {
+
+  .cleanNavbarInner {
+    height: 64px;
+    padding: 0 14px;
+  }
+
+  .cleanNavbar .navbarLogo img {
+    width: 120px;
+  }
+
+  .navbarLinks a:not(.navbarCta) {
+    display: none;
+  }
+
+  .navbarCta {
+    padding: 12px 18px;
+    font-size: 14px;
+  }
+
+  .cleanHeroTitle {
+    font-size: clamp(54px, 14vw, 72px);
+
+    line-height: 0.95;
+
+    letter-spacing: -2px;
+  }
+
+  .cleanHeroText {
+    font-size: 17px;
+
+    line-height: 1.8;
+  }
+
+  .cleanHeroActions {
+    flex-direction: column;
+  }
+
+  .cleanHeroActions a {
+    width: 100%;
+  }
+
+  .cleanHeroActions button,
+  .heroSecondaryBtn {
+    width: 100%;
+  }
+
+  .cleanHeroStats {
+    grid-template-columns: 1fr;
+  }
+
+  .cleanHeroStats div {
+    min-height: 130px;
+  }
+
+  .aiCardPreview {
+    padding: 22px;
+  }
+
+  .aiCardTitle {
+    font-size: 22px;
+  }
+
+  .aiCardDesc {
+    font-size: 15px;
+  }
+
+  .aiMetric {
+    padding: 12px;
+  }
+
+  .aiCardTags {
+    justify-content: center;
+  }
+}
