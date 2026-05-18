@@ -33,7 +33,6 @@ export default function HeroSection() {
             <strong>
               <AnimatedStat value={25000} suffix="+" />
             </strong>
-
             <span>Listings Generated</span>
           </div>
 
@@ -41,7 +40,6 @@ export default function HeroSection() {
             <strong>
               <AnimatedStat value={13} />
             </strong>
-
             <span>Optimized Tags</span>
           </div>
 
@@ -49,57 +47,85 @@ export default function HeroSection() {
             <strong>
               <AnimatedStat value={92} suffix="%" />
             </strong>
-
             <span>SEO Score</span>
           </div>
         </div>
       </div>
 
       <div className="cleanHeroPreview">
-        <div className="cleanPreviewCard">
-          <div className="previewTop">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-
-          <div className="previewScore">
-            <div>
-              <strong>92%</strong>
-              <span>SEO Score</span>
+        <div className="aiPreviewCard">
+          <div className="aiPreviewTop">
+            <div className="aiPreviewBadge">
+              AI SEO ANALYSIS
             </div>
 
-            <div className="previewMetrics">
-              <div>
-                <span>Title SEO</span>
-                <strong>High</strong>
-              </div>
-
-              <div>
-                <span>Keyword Match</span>
-                <strong>92%</strong>
-              </div>
-
-              <div>
-                <span>Buyer Intent</span>
-                <strong>Strong</strong>
-              </div>
-            </div>
+            <div className="aiLiveDot"></div>
           </div>
 
-          <h3>
+          <h3 className="aiPreviewTitle">
             Floral PNG Bundle for Etsy Sellers
           </h3>
 
-          <p>
-            AI-generated Etsy listing with stronger keyword targeting and
-            buyer-intent optimization.
+          <p className="aiPreviewText">
+            AI-generated Etsy listing optimized for keyword ranking, buyer
+            intent, and marketplace visibility.
           </p>
 
-          <div className="previewTags">
+          <div className="aiScoreWrap">
+            <div className="aiScoreCircle">
+              <strong>92%</strong>
+            </div>
+
+            <div className="aiMetrics">
+              <div className="aiMetric">
+                <div>
+                  <span>Keyword Match</span>
+                  <strong>94%</strong>
+                </div>
+
+                <div className="aiMetricBar">
+                  <span></span>
+                </div>
+              </div>
+
+              <div className="aiMetric">
+                <div>
+                  <span>Competition</span>
+                  <strong>Low</strong>
+                </div>
+
+                <div className="aiMetricBar">
+                  <span></span>
+                </div>
+              </div>
+
+              <div className="aiMetric">
+                <div>
+                  <span>Buyer Intent</span>
+                  <strong>Strong</strong>
+                </div>
+
+                <div className="aiMetricBar">
+                  <span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="aiPreviewTags">
             <span>etsy seo</span>
-            <span>png design</span>
-            <span>digital file</span>
+            <span>digital download</span>
+            <span>png bundle</span>
+            <span>clipart</span>
+          </div>
+
+          <div className="aiSuggestionBox">
+            <strong>AI Suggestion</strong>
+
+            <p>
+              Add “Commercial Use” in the title to improve conversion rate and
+              long-tail search visibility.
+            </p>
           </div>
         </div>
       </div>
