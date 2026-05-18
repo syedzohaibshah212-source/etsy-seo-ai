@@ -1,6 +1,7 @@
 import Navbar from "@/components/layout/Navbar"
 import Container from "@/components/layout/Container"
 import HeroSection from "@/components/home/HeroSection"
+import WorkflowSection from "@/components/home/WorkflowSection"
 import FeaturesSection from "@/components/home/FeaturesSection"
 import TestimonialsSection from "@/components/home/TestimonialsSection"
 import PricingPreview from "@/components/home/PricingPreview"
@@ -14,6 +15,7 @@ export default function Home() {
 
       <Container>
         <HeroSection />
+        <WorkflowSection />
         <FeaturesSection />
         <TestimonialsSection />
         <PricingPreview />
