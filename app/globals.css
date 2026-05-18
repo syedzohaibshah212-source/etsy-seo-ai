@@ -2411,4 +2411,5 @@ body {
 .premiumFeaturesStack {
   display: flex;
   flex-direction: column;
-  gap: 34
+  gap: 34px;
+}
