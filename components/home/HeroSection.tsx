@@ -5,9 +5,7 @@ export default function HeroSection() {
   return (
     <section className="cleanHeroSection">
       <div className="cleanHeroContent">
-        <div className="heroBadge">
-          AI-powered Etsy SEO Workspace
-        </div>
+        <div className="heroBadge">AI-powered Etsy SEO Workspace</div>
 
         <h1 className="cleanHeroTitle">
           Create Better Etsy Listings With AI
@@ -53,22 +51,19 @@ export default function HeroSection() {
       </div>
 
       <div className="cleanHeroPreview">
-        <div className="aiPreviewCard">
-          <div className="aiPreviewTop">
-            <div className="aiPreviewBadge">
-              AI SEO ANALYSIS
-            </div>
-
+        <div className="aiCardPreview">
+          <div className="aiCardTop">
+            <div className="aiCardBadge">AI SEO ANALYSIS</div>
             <div className="aiLiveDot"></div>
           </div>
 
-          <h3 className="aiPreviewTitle">
+          <h3 className="aiCardTitle">
             Floral PNG Bundle for Etsy Sellers
           </h3>
 
-          <p className="aiPreviewText">
+          <p className="aiCardDesc">
             AI-generated Etsy listing optimized for keyword ranking, buyer
-            intent, and marketplace visibility.
+            intent and marketplace visibility.
           </p>
 
           <div className="aiScoreWrap">
@@ -78,33 +73,30 @@ export default function HeroSection() {
 
             <div className="aiMetrics">
               <div className="aiMetric">
-                <div>
+                <div className="aiMetricTop">
                   <span>Keyword Match</span>
                   <strong>94%</strong>
                 </div>
-
                 <div className="aiMetricBar">
                   <span></span>
                 </div>
               </div>
 
               <div className="aiMetric">
-                <div>
+                <div className="aiMetricTop">
                   <span>Competition</span>
                   <strong>Low</strong>
                 </div>
-
                 <div className="aiMetricBar">
                   <span></span>
                 </div>
               </div>
 
               <div className="aiMetric">
-                <div>
+                <div className="aiMetricTop">
                   <span>Buyer Intent</span>
                   <strong>Strong</strong>
                 </div>
-
                 <div className="aiMetricBar">
                   <span></span>
                 </div>
@@ -112,7 +104,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="aiPreviewTags">
+          <div className="aiCardTags">
             <span>etsy seo</span>
             <span>digital download</span>
             <span>png bundle</span>
@@ -121,7 +113,6 @@ export default function HeroSection() {
 
           <div className="aiSuggestionBox">
             <strong>AI Suggestion</strong>
-
             <p>
               Add “Commercial Use” in the title to improve conversion rate and
               long-tail search visibility.
