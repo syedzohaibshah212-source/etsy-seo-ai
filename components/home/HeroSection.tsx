@@ -2,101 +2,115 @@ import Button from "@/components/ui/Button"
 import Card from "@/components/ui/Card"
 import AnimatedStat from "@/components/home/AnimatedStat"
 
+const railItems = ["SEO", "AI", "TAG", "AUDIT"]
+
 export default function HeroSection() {
   return (
-    <section className="heroSection">
-      <Card className="heroCard">
-        <div className="heroBadge">AI-powered Etsy SEO Generator</div>
-
-        <h1 className="heroTitle">
-          Generate High-Converting Etsy Listings With AI
-        </h1>
-
-        <p className="heroText">
-          Create SEO-optimized Etsy titles, descriptions, tags and listing
-          audits in seconds using AI-powered Etsy SEO analysis.
-        </p>
-
-        <div className="aiTypingLine">
-          <span>AI is optimizing:</span>
-          <strong>
-            {" "}
-            Etsy title • 13 tags • SEO description • audit score
-          </strong>
+    <section className="heroSection cinematicHeroSection">
+      <Card className="heroCard cinematicHeroCard">
+        <div className="heroRail">
+          {railItems.map((item) => (
+            <span key={item}>{item}</span>
+          ))}
         </div>
 
-        <div className="heroActions">
-          <a href="/generate">
-            <Button>Generate Listing</Button>
-          </a>
+        <div className="cinematicHeroContent">
+          <div className="heroBadge">AI-powered Etsy SEO Workspace</div>
 
-          <a href="/pricing" className="heroSecondaryBtn">
-            View Pricing
-          </a>
-        </div>
+          <h1 className="heroTitle cinematicHeroTitle">
+            Build Better Etsy Listings With AI SEO Intelligence
+          </h1>
 
-        <div className="heroStats premiumStats">
-          <div className="premiumStatItem">
+          <p className="heroText cinematicHeroText">
+            Upload a product image and generate optimized Etsy titles,
+            descriptions, tags, audits and SEO scores inside one premium AI
+            workspace.
+          </p>
+
+          <div className="aiTypingLine cinematicTypingLine">
+            <span>AI is optimizing:</span>
             <strong>
-              <AnimatedStat value={25000} suffix="+" />
+              {" "}
+              buyer intent • keywords • title clarity • SEO score
             </strong>
-
-            <span>Listings Generated</span>
           </div>
 
-          <div className="premiumStatItem">
-            <strong>
-              <AnimatedStat value={13} />
-            </strong>
+          <div className="heroActions cinematicHeroActions">
+            <a href="/generate">
+              <Button>Generate Listing</Button>
+            </a>
 
-            <span>Etsy Tags</span>
+            <a href="/audit" className="heroSecondaryBtn">
+              Audit Listing
+            </a>
           </div>
 
-          <div className="premiumStatItem">
-            <strong>
-              <AnimatedStat value={92} suffix="%" />
-            </strong>
+          <div className="heroStats premiumStats cinematicStats">
+            <div className="premiumStatItem">
+              <strong>
+                <AnimatedStat value={25000} suffix="+" />
+              </strong>
 
-            <span>SEO Score</span>
-          </div>
-        </div>
+              <span>Listings Generated</span>
+            </div>
 
-        <div className="floatingDashboardMockup">
-          <div className="mockupTop">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
+            <div className="premiumStatItem">
+              <strong>
+                <AnimatedStat value={13} />
+              </strong>
 
-          <div className="mockupContent">
-            <div className="mockupScore">
-              <strong>92</strong>
+              <span>Etsy Tags</span>
+            </div>
+
+            <div className="premiumStatItem">
+              <strong>
+                <AnimatedStat value={92} suffix="%" />
+              </strong>
 
               <span>SEO Score</span>
             </div>
+          </div>
+        </div>
 
-            <div className="mockupInfo">
-              <h4>
-                Floral PNG Bundle for Etsy Sellers
-              </h4>
+        <div className="cinematicHeroVisual">
+          <div className="heroMapGlow" />
 
-              <p>
-                AI-optimized Etsy title with high buyer intent keywords,
-                stronger visibility and better click-through potential.
-              </p>
+          <div className="seoScorePanel">
+            <span>SEO Score</span>
+            <strong>92</strong>
+            <p>High visibility listing</p>
+          </div>
 
-              <div className="mockupBars">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
+          <div className="listingPreviewPanel">
+            <div className="mockupTop">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+
+            <h3>Floral PNG Bundle for Etsy Sellers</h3>
+
+            <p>
+              AI-optimized Etsy title with stronger keyword targeting and
+              buyer-focused description structure.
+            </p>
+
+            <div className="mockupBars">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+
+            <div className="mockupTags">
+              <span>png design</span>
+              <span>etsy seo</span>
+              <span>digital file</span>
             </div>
           </div>
 
-          <div className="mockupTags">
-            <span>png design</span>
-            <span>etsy seo</span>
-            <span>digital file</span>
+          <div className="tagCloudPanel">
+            <span>13 Tags Ready</span>
+            <strong>AI optimized</strong>
           </div>
         </div>
       </Card>
