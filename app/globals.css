@@ -2406,3 +2406,9 @@ body {
     justify-content: center;
   }
 }
+/* PREMIUM FEATURES CINEMATIC */
+
+.premiumFeaturesStack {
+  display: flex;
+  flex-direction: column;
+  gap: 34
