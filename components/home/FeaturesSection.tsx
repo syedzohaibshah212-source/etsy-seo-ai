@@ -132,25 +132,36 @@ function FeatureVisual({ type }: { type: string }) {
   }
 
   return (
-    <div className="featureVisual generatorVisual">
-      <div className="visualHeader">
-        <span>AI Generator</span>
+    <div className="featureAiCard">
+      <div className="featureAiTop">
+        <span>AI GENERATOR</span>
         <strong>Live SEO score</strong>
       </div>
 
-      <div className="generatorVisualBody">
-        <div className="featurePreviewScore">
-          92%
+      <div className="featureAiBody">
+        <div className="featureAiScore">
+          <strong>92%</strong>
         </div>
 
-        <div className="visualLines">
-          <span></span>
-          <span></span>
-          <span></span>
+        <div className="featureAiMetrics">
+          <div>
+            <span>Title SEO</span>
+            <strong>94%</strong>
+          </div>
+
+          <div>
+            <span>Tag Match</span>
+            <strong>88%</strong>
+          </div>
+
+          <div>
+            <span>Buyer Intent</span>
+            <strong>Strong</strong>
+          </div>
         </div>
       </div>
 
-      <div className="featurePreviewTags">
+      <div className="featureAiTags">
         <span>etsy seo</span>
         <span>png design</span>
         <span>digital file</span>

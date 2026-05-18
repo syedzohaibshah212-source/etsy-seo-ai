@@ -2413,3 +2413,116 @@ body {
   flex-direction: column;
   gap: 34px;
 }
+.featureAiCard {
+  padding: 26px;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at top right, rgba(245,184,91,0.14), transparent 34%),
+    linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.035));
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+}
+
+.featureAiTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.featureAiTop span {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.featureAiTop strong {
+  color: var(--primary);
+  font-size: 13px;
+}
+
+.featureAiBody {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 22px;
+  align-items: center;
+}
+
+.featureAiScore {
+  width: 130px;
+  height: 130px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background:
+    conic-gradient(var(--primary) 0% 92%, rgba(255,255,255,0.08) 92%);
+  position: relative;
+}
+
+.featureAiScore::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: inherit;
+  background: #091321;
+}
+
+.featureAiScore strong {
+  position: relative;
+  z-index: 2;
+  color: var(--primary);
+  font-size: 34px;
+  font-weight: 900;
+}
+
+.featureAiMetrics {
+  display: grid;
+  gap: 12px;
+}
+
+.featureAiMetrics div {
+  display: flex;
+  justify-content: space-between;
+  padding: 13px 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.featureAiMetrics span {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.featureAiMetrics strong {
+  color: white;
+  font-size: 12px;
+}
+
+.featureAiTags {
+  margin-top: 22px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.featureAiTags span {
+  padding: 9px 13px;
+  border-radius: 999px;
+  background: rgba(16,185,129,0.12);
+  border: 1px solid rgba(16,185,129,0.22);
+  color: #bfffe7;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .featureAiBody {
+    grid-template-columns: 1fr;
+  }
+
+  .featureAiScore {
+    margin: 0 auto;
+  }
+}
