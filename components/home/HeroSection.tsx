@@ -69,10 +69,21 @@ export default function HeroSection() {
               <span>SEO Score</span>
             </div>
 
-            <div className="previewBars">
-              <span></span>
-              <span></span>
-              <span></span>
+            <div className="previewMetrics">
+              <div>
+                <span>Title SEO</span>
+                <strong>High</strong>
+              </div>
+
+              <div>
+                <span>Keyword Match</span>
+                <strong>92%</strong>
+              </div>
+
+              <div>
+                <span>Buyer Intent</span>
+                <strong>Strong</strong>
+              </div>
             </div>
           </div>
 
