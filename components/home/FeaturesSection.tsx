@@ -10,6 +10,7 @@ const features = [
       "Buyer intent optimization",
       "Long-tail Etsy keywords",
     ],
+    type: "generator",
   },
 
   {
@@ -21,6 +22,7 @@ const features = [
       "Optimization suggestions",
       "Improved title generation",
     ],
+    type: "audit",
   },
 
   {
@@ -32,6 +34,7 @@ const features = [
       "Long-tail keyword strategy",
       "Niche relevance scoring",
     ],
+    type: "tags",
   },
 
   {
@@ -43,8 +46,118 @@ const features = [
       "Digital product clarity",
       "Better conversion structure",
     ],
+    type: "copy",
   },
 ]
+
+function FeatureVisual({ type }: { type: string }) {
+  if (type === "audit") {
+    return (
+      <div className="featureVisual auditVisual">
+        <div className="visualHeader">
+          <span>SEO Audit</span>
+          <strong>Weaknesses found</strong>
+        </div>
+
+        <div className="auditRows">
+          <div>
+            <span>Title clarity</span>
+            <strong>72%</strong>
+          </div>
+
+          <div>
+            <span>Tag quality</span>
+            <strong>64%</strong>
+          </div>
+
+          <div>
+            <span>Keyword intent</span>
+            <strong>81%</strong>
+          </div>
+        </div>
+
+        <div className="auditWarning">
+          Improve title opening phrase and add stronger buyer-intent tags.
+        </div>
+      </div>
+    )
+  }
+
+  if (type === "tags") {
+    return (
+      <div className="featureVisual tagsVisual">
+        <div className="visualHeader">
+          <span>AI Tags</span>
+          <strong>13 optimized tags</strong>
+        </div>
+
+        <div className="tagCloudPreview">
+          <span>floral png</span>
+          <span>etsy clipart</span>
+          <span>digital file</span>
+          <span>seller design</span>
+          <span>printable art</span>
+          <span>small shop</span>
+          <span>png bundle</span>
+          <span>craft supply</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (type === "copy") {
+    return (
+      <div className="featureVisual copyVisual">
+        <div className="visualHeader">
+          <span>Description</span>
+          <strong>Conversion ready</strong>
+        </div>
+
+        <div className="copyPreviewBox">
+          <h4>Premium Etsy Description</h4>
+
+          <p>
+            This digital PNG design is created for Etsy sellers, crafters and
+            small business owners who need polished, ready-to-use listing copy.
+          </p>
+
+          <ul>
+            <li>Clear digital product wording</li>
+            <li>Natural keyword placement</li>
+            <li>Buyer-friendly structure</li>
+          </ul>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="featureVisual generatorVisual">
+      <div className="visualHeader">
+        <span>AI Generator</span>
+        <strong>Live SEO score</strong>
+      </div>
+
+      <div className="generatorVisualBody">
+        <div className="featurePreviewScore">
+          92%
+        </div>
+
+        <div className="visualLines">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div className="featurePreviewTags">
+        <span>etsy seo</span>
+        <span>png design</span>
+        <span>digital file</span>
+      </div>
+    </div>
+  )
+}
 
 export default function FeaturesSection() {
   return (
@@ -89,31 +202,7 @@ export default function FeaturesSection() {
             </div>
 
             <div className="premiumFeaturePreview">
-              <div className="featurePreviewCard">
-                <div className="featurePreviewTop">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-
-                <div className="featurePreviewBody">
-                  <div className="featurePreviewScore">
-                    92%
-                  </div>
-
-                  <div className="featurePreviewLines">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                </div>
-
-                <div className="featurePreviewTags">
-                  <span>etsy seo</span>
-                  <span>png design</span>
-                  <span>digital file</span>
-                </div>
-              </div>
+              <FeatureVisual type={feature.type} />
             </div>
           </Card>
         ))}
