@@ -8,30 +8,15 @@ type Props = {
 }
 
 export default function AnimatedStat({ value, suffix = "" }: Props) {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(value)
 
   useEffect(() => {
-    let start = 0
-    const duration = 1400
-    const increment = value / (duration / 16)
-
-    const timer = setInterval(() => {
-      start += increment
-
-      if (start >= value) {
-        setCount(value)
-        clearInterval(timer)
-      } else {
-        setCount(Math.floor(start))
-      }
-    }, 16)
-
-    return () => clearInterval(timer)
+    setCount(value)
   }, [value])
 
   return (
     <>
-      {count}
+      {count.toLocaleString()}
       {suffix}
     </>
   )
