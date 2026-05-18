@@ -4,55 +4,54 @@ import Card from "@/components/ui/Card"
 export default function CTASection() {
   return (
     <section className="ctaSection">
-      <Card className="ctaCard">
+      <Card className="ctaCard premiumCtaCard">
         <div className="ctaGlow" />
 
         <span className="ctaBadge">
-          Stop Guessing Etsy SEO
+          AI-powered Etsy SEO workflow
         </span>
 
         <h2 className="ctaTitle">
-          Create Higher Ranking Etsy Listings With AI
+          Start Creating Better Etsy Listings In Minutes
         </h2>
 
         <p className="ctaText">
-          EtsySEO AI helps Etsy sellers generate optimized titles, keyword-rich
-          tags, AI descriptions, listing audits and SEO scores in minutes
-          instead of hours.
+          Generate optimized Etsy titles, descriptions, tags and listing audits
+          using AI trained for modern Etsy SEO workflows.
         </p>
 
         <div className="ctaStats">
           <div className="ctaStat">
-            <strong>12K+</strong>
-            <span>Listings Generated</span>
+            <strong>25K+</strong>
+            <span>AI Listings Generated</span>
           </div>
 
           <div className="ctaStat">
-            <strong>3.1M+</strong>
-            <span>Keywords Processed</span>
+            <strong>92%</strong>
+            <span>Average SEO Score</span>
           </div>
 
           <div className="ctaStat">
-            <strong>4.9/5</strong>
-            <span>Seller Rating</span>
+            <strong>13</strong>
+            <span>Optimized Etsy Tags</span>
           </div>
         </div>
 
         <div className="ctaActions">
           <a href="/generate">
             <Button>
-              Generate My Etsy Listing
+              Generate My Listing
             </Button>
           </a>
 
-          <a href="/audit" className="ctaSecondaryBtn">
-            Audit Existing Listing
+          <a href="/pricing" className="ctaSecondaryBtn">
+            View Pricing
           </a>
         </div>
 
         <div className="ctaBottomText">
-          Built specifically for Etsy digital product sellers, PNG creators and
-          print-on-demand shops.
+          Built for Etsy sellers, PNG creators, print-on-demand shops and
+          digital product businesses.
         </div>
       </Card>
     </section>
