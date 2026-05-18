@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabase"
 
 type UserProfile = {
@@ -16,8 +16,17 @@ type ProfileData = {
   avatar_url: string | null
 }
 
+const navLinks = [
+  { href: "/generate", label: "Generator" },
+  { href: "/audit", label: "Audit" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/history", label: "History" },
+  { href: "/dashboard", label: "Dashboard" },
+]
+
 export default function Navbar() {
   const router = useRouter()
+  const pathname = usePathname()
 
   const [user, setUser] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
@@ -41,9 +50,7 @@ export default function Navbar() {
             (typeof user.user_metadata?.full_name === "string"
               ? user.user_metadata.full_name
               : "User"),
-
           email: user.email || "",
-
           avatarUrl: profile?.avatar_url || "",
         })
       }
@@ -69,9 +76,7 @@ export default function Navbar() {
             (typeof session.user.user_metadata?.full_name === "string"
               ? session.user.user_metadata.full_name
               : "User"),
-
           email: session.user.email || "",
-
           avatarUrl: profile?.avatar_url || "",
         })
       } else {
@@ -90,22 +95,22 @@ export default function Navbar() {
   }
 
   return (
-    <header className="navbar">
-      <div className="navbarInner">
+    <header className="navbar cinematicNavbar">
+      <div className="navbarInner cinematicNavbarInner">
         <Link href="/" className="navbarLogo">
           <img src="/logo.png" alt="EtsySEO AI" />
         </Link>
 
-        <nav className="navbarLinks">
-          <Link href="/generate">Generator</Link>
-
-          <Link href="/pricing">Pricing</Link>
-
-          <Link href="/history">History</Link>
-
-          <Link href="/dashboard">Dashboard</Link>
-
-          <Link href="/settings">Settings</Link>
+        <nav className="navbarLinks cinematicNavLinks">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={pathname === link.href ? "activeNavLink" : ""}
+            >
+              {link.label}
+            </Link>
+          ))}
 
           {!loading && !user && (
             <>
@@ -118,61 +123,16 @@ export default function Navbar() {
           )}
 
           {!loading && user && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "12px",
-                marginLeft: "10px",
-              }}
-            >
-              <Link href="/settings">
-                <div
-                  title={user.fullName}
-                  style={{
-                    width: "44px",
-                    height: "44px",
-                    borderRadius: "999px",
-                    overflow: "hidden",
-                    background:
-                      "linear-gradient(135deg, #d4af37 0%, #22c55e 100%)",
-                    color: "#000",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: 800,
-                    fontSize: "16px",
-                    textTransform: "uppercase",
-                    boxShadow: "0 10px 30px rgba(250,204,21,0.25)",
-                    cursor: "pointer",
-                  }}
-                >
-                  {user.avatarUrl ? (
-                    <img
-                      src={user.avatarUrl}
-                      alt={user.fullName}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  ) : (
-                    user.fullName.charAt(0)
-                  )}
-                </div>
+            <div className="navUserBox">
+              <Link href="/settings" className="navAvatar" title={user.fullName}>
+                {user.avatarUrl ? (
+                  <img src={user.avatarUrl} alt={user.fullName} />
+                ) : (
+                  user.fullName.charAt(0)
+                )}
               </Link>
 
-              <button
-                onClick={logout}
-                style={{
-                  border: "none",
-                  background: "transparent",
-                  color: "#fff",
-                  cursor: "pointer",
-                  fontWeight: 600,
-                }}
-              >
+              <button type="button" onClick={logout} className="navLogout">
                 Logout
               </button>
             </div>
