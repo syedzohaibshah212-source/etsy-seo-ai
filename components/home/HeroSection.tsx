@@ -54,7 +54,7 @@ export default function HeroSection() {
         <div className="aiCardPreview">
           <div className="aiCardTop">
             <div className="aiCardBadge">AI SEO ANALYSIS</div>
-            <div className="aiLiveDot"></div>
+            <div className="aiLiveDot" />
           </div>
 
           <h3 className="aiCardTitle">
@@ -77,8 +77,9 @@ export default function HeroSection() {
                   <span>Keyword Match</span>
                   <strong>94%</strong>
                 </div>
+
                 <div className="aiMetricBar">
-                  <span></span>
+                  <span />
                 </div>
               </div>
 
@@ -87,8 +88,9 @@ export default function HeroSection() {
                   <span>Competition</span>
                   <strong>Low</strong>
                 </div>
+
                 <div className="aiMetricBar">
-                  <span></span>
+                  <span />
                 </div>
               </div>
 
@@ -97,8 +99,9 @@ export default function HeroSection() {
                   <span>Buyer Intent</span>
                   <strong>Strong</strong>
                 </div>
+
                 <div className="aiMetricBar">
-                  <span></span>
+                  <span />
                 </div>
               </div>
             </div>
@@ -113,6 +116,7 @@ export default function HeroSection() {
 
           <div className="aiSuggestionBox">
             <strong>AI Suggestion</strong>
+
             <p>
               Add “Commercial Use” in the title to improve conversion rate and
               long-tail search visibility.
