@@ -145,13 +145,13 @@ function FeatureVisual({ type }: { type: string }) {
 
         <div className="featureAiMetrics">
           <div>
-            <span>Title SEO</span>
-            <strong>94%</strong>
+            <span>12 SEO Methods</span>
+            <strong>Active</strong>
           </div>
 
           <div>
-            <span>Tag Match</span>
-            <strong>88%</strong>
+            <span>Keyword Match</span>
+            <strong>94%</strong>
           </div>
 
           <div>
