@@ -198,7 +198,17 @@ export default function GeneratePage() {
         body: formData,
       })
 
-      const json = await response.json()
+      const text = await response.text()
+
+      console.log("RAW API RESPONSE:", text)
+
+      let json
+
+      try {
+        json = JSON.parse(text)
+      } catch {
+        throw new Error(text || "Server returned invalid response.")
+      }
 
       if (!response.ok || !json.success) {
         throw new Error(json.error || "Failed to generate listing.")
