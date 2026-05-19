@@ -68,36 +68,59 @@ export default function GeneratePage() {
   }, [plan])
 
   useEffect(() => {
+    let mounted = true
+
     async function loadProfile() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
+      try {
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser()
 
-      if (!user) {
-        router.push("/login")
-        return
+        if (userError || !user) {
+          if (mounted) setPageLoading(false)
+          router.push("/login")
+          return
+        }
+
+        const { data, error: profileError } = await supabase
+          .from("profiles")
+          .select("plan, credits")
+          .eq("id", user.id)
+          .maybeSingle()
+
+        if (profileError) {
+          console.error("Profile load error:", profileError)
+        }
+
+        const userPlan =
+          typeof data?.plan === "string" && data.plan ? data.plan : "Free"
+
+        if (!mounted) return
+
+        setPlan(userPlan)
+        setRemainingCredits(
+          typeof data?.credits === "number" ? data.credits : 5
+        )
+
+        if (userPlan === "Free" && !seoMethods.slice(0, 3).includes(method)) {
+          setMethod(seoMethods[0])
+        }
+      } catch (err) {
+        console.error("Generator profile error:", err)
+        if (mounted) {
+          setError("Could not load your profile. Please refresh or login again.")
+        }
+      } finally {
+        if (mounted) setPageLoading(false)
       }
-
-      const { data } = await supabase
-        .from("profiles")
-        .select("plan, credits")
-        .eq("id", user.id)
-        .maybeSingle()
-
-      const userPlan =
-        typeof data?.plan === "string" && data.plan ? data.plan : "Free"
-
-      setPlan(userPlan)
-      setRemainingCredits(typeof data?.credits === "number" ? data.credits : 5)
-
-      if (userPlan === "Free" && !seoMethods.slice(0, 3).includes(method)) {
-        setMethod(seoMethods[0])
-      }
-
-      setPageLoading(false)
     }
 
     loadProfile()
+
+    return () => {
+      mounted = false
+    }
   }, [router, method])
 
   function handleImageChange(file: File) {
@@ -247,7 +270,6 @@ ${result.scoreFeedback || ""}
     doc.text(`Visibility Score: ${safeScore(result.visibilityScore)}/100`, 20, 50)
     doc.text(`Competition Score: ${safeScore(result.competitionScore)}/100`, 20, 60)
     doc.text(`Optimization Score: ${safeScore(result.optimizationScore)}/100`, 20, 70)
-
     doc.text(`Title: ${result.title}`, 20, 88, { maxWidth: 170 })
     doc.text(`Category: ${result.category}`, 20, 112)
 
