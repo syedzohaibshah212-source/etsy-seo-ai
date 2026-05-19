@@ -70,6 +70,14 @@ export default function GeneratePage() {
   useEffect(() => {
     let mounted = true
 
+    const fallbackTimer = window.setTimeout(() => {
+      if (!mounted) return
+
+      setPlan("Free")
+      setRemainingCredits(5)
+      setPageLoading(false)
+    }, 3500)
+
     async function loadProfile() {
       try {
         const {
@@ -77,8 +85,10 @@ export default function GeneratePage() {
           error: userError,
         } = await supabase.auth.getUser()
 
+        if (!mounted) return
+
         if (userError || !user) {
-          if (mounted) setPageLoading(false)
+          setPageLoading(false)
           router.push("/login")
           return
         }
@@ -89,14 +99,14 @@ export default function GeneratePage() {
           .eq("id", user.id)
           .maybeSingle()
 
+        if (!mounted) return
+
         if (profileError) {
           console.error("Profile load error:", profileError)
         }
 
         const userPlan =
           typeof data?.plan === "string" && data.plan ? data.plan : "Free"
-
-        if (!mounted) return
 
         setPlan(userPlan)
         setRemainingCredits(
@@ -106,13 +116,19 @@ export default function GeneratePage() {
         if (userPlan === "Free" && !seoMethods.slice(0, 3).includes(method)) {
           setMethod(seoMethods[0])
         }
+
+        setPageLoading(false)
       } catch (err) {
         console.error("Generator profile error:", err)
+
         if (mounted) {
-          setError("Could not load your profile. Please refresh or login again.")
+          setPlan("Free")
+          setRemainingCredits(5)
+          setError("Could not load your profile. You can refresh or login again.")
+          setPageLoading(false)
         }
       } finally {
-        if (mounted) setPageLoading(false)
+        window.clearTimeout(fallbackTimer)
       }
     }
 
@@ -120,6 +136,7 @@ export default function GeneratePage() {
 
     return () => {
       mounted = false
+      window.clearTimeout(fallbackTimer)
     }
   }, [router, method])
 
